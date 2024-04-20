@@ -1,1 +1,1 @@
-The "MyKids" app's App Server API
+The "MyKids" app's App Server API . 
