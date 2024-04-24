@@ -25,8 +25,8 @@ export class UserController {
     return await this.userService.findAll();
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
+  @Get(':id')[[[[[[[[]]]]]]]]
+    async findOne(@Param('id') id: string) {
     return await this.userService.findOne(+id);
   }
 
