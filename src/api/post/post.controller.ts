@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  UseGuards,
   // Post,
   // Body,
   // Patch,
@@ -10,6 +11,8 @@ import {
 import { PostService } from './post.service';
 // import { CreatePostDto } from './dto/create-post.dto';
 // import { UpdatePostDto } from './dto/update-post.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { RoleGuard } from '../../common/guards/role.guard';
 
 @Controller('post')
 export class PostController {
@@ -21,11 +24,13 @@ export class PostController {
   // }
 
   @Get()
+@UseGuards(AuthGuard('jwt'), RoleGuard)
   findAll() {
     return this.postService.findAll();
   }
 
   @Get(':id')
+@UseGuards(AuthGuard('jwt'), RoleGuard)
   findOne(@Param('id') id: string) {
     return this.postService.findOne(+id);
   }

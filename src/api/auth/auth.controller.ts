@@ -16,6 +16,7 @@ import { CreateAuthDto } from './dto/create-auth.dto';
 import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
+import { RoleGuard } from '../../common/guards/role.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -50,7 +51,7 @@ export class AuthController {
   }
 
   @Get('profile')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
   async getProfile(
     @Headers('authorization') authHeader: string,
     @Res() response: Response,

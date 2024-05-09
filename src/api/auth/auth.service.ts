@@ -12,7 +12,7 @@ import { CreateAuthDto } from './dto/create-auth.dto';
 import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { JwtService } from '@nestjs/jwt';
 import { Cache } from '@nestjs/cache-manager';
-import { JwtPayload } from './interfaces/jwt-payload.interface';
+import { JwtPayload } from '../../common/interfaces/jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
@@ -58,7 +58,10 @@ export class AuthService {
       throw new BadRequestException('Số điện thoại và mã OTP là bắt buộc');
     }
 
-    const user = await this.userRepository.findOne({ where: { phone } });
+    const user = await this.userRepository.findOne({
+      where: { phone },
+      relations: ['role'],
+    });
     if (!user) {
       throw new BadRequestException('Số điện thoại không hợp lệ');
     }
@@ -74,10 +77,10 @@ export class AuthService {
 
     const accessTokenPayload = {
       userId: user.id,
+      roleId: user.role.id,
+      roleName: user.role.name,
       issuedAt: new Date().toISOString(),
-      expiresAt: new Date(
-        Date.now() + 4 * 30 * 24 * 60 * 60 * 1000,
-      ).toISOString(), // 4 months
+      expiresAt: new Date(Date.now() + 4 * 30 * 24 * 60 * 60 * 1000).toISOString(), // 4 months
     };
 
     const accessToken = this.jwtService.sign(accessTokenPayload);
