@@ -2,39 +2,73 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
+  ManyToMany,
+  JoinTable,
   ManyToOne,
+  OneToMany,
   JoinColumn,
 } from 'typeorm';
+import { Parent } from '../entities/parent.entity';
+import { Gender } from '../enum/gender_t.enum';
+import { StudentParent } from '../entities/student-parent.entity';
+import { StudentClass } from '../entities/student-class.entity';
+import { Attendance } from '../entities/attendance.entity';
+import { StudentYearLevel } from '../entities/student-year-level.entity';
 import { User } from './user.entity';
-import { School } from './school.entity';
 
 @Entity('students')
 export class Student {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 255, nullable: false })
-  name: string;
+  @Column()
+  givenName: string;
+
+  @Column()
+  surname: string;
+
+  @Column({ nullable: true })
+  middleName: string;
+
+  @Column({ type: 'enum', enum: Gender })
+  gender: Gender;
+
+  @Column()
+  dateOfBirth: Date;
+
+  @Column({ nullable: true })
+  emailAddress: string;
+
+  @Column({ nullable: true })
+  phoneNumber: string;
 
   @Column({ nullable: false })
   school_id: number;
-
-  @ManyToOne(() => School, (school) => school.students)
-  @JoinColumn({ name: 'school_id' })
-  school: School;
-
-  @Column({ nullable: false })
-  parent_id: number;
 
   @ManyToOne(() => User, (user) => user.students)
   @JoinColumn({ name: 'parent_id' })
   user: User;
 
-  @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
-  created_at: Date;
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
-  updated_at: Date;
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
+
+  @ManyToMany(() => Parent, parent => parent.students)
+  @JoinTable({
+    name: 'student_guardian',
+    joinColumn: { name: 'student_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'guardian_id', referencedColumnName: 'id' },
+  })
+  parent: Parent[];
+
+  @OneToMany(() => StudentClass, studentClass => studentClass.student)
+  studentClasses: StudentClass[];
+
+  @OneToMany(() => Attendance, attendance => attendance.student)
+  attendances: Attendance[];
+
+  @OneToMany(() => StudentYearLevel, studentYearLevel => studentYearLevel.student)
+  studentYearLevels: StudentYearLevel[];
 }

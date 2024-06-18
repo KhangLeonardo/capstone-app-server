@@ -44,7 +44,7 @@ export class User {
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
 
-  @OneToMany(() => Student, (student) => student.user)
+  @OneToMany(() => Student, (student) => student.parent)
   students: Student[];
 
   @OneToMany(() => ToggleLike, (toggleLike) => toggleLike.user)
