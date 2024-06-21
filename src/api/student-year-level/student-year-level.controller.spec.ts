@@ -11,7 +11,9 @@ describe('StudentYearLevelController', () => {
       providers: [StudentYearLevelService],
     }).compile();
 
-    controller = module.get<StudentYearLevelController>(StudentYearLevelController);
+    controller = module.get<StudentYearLevelController>(
+      StudentYearLevelController,
+    );
   });
 
   it('should be defined', () => {

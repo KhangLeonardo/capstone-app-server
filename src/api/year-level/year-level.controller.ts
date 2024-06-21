@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { YearLevelService } from './year-level.service';
 import { CreateYearLevelDto } from './dto/create-year-level.dto';
 import { UpdateYearLevelDto } from './dto/update-year-level.dto';
@@ -23,7 +31,10 @@ export class YearLevelController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateYearLevelDto: UpdateYearLevelDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateYearLevelDto: UpdateYearLevelDto,
+  ) {
     return this.yearLevelService.update(+id, updateYearLevelDto);
   }
 

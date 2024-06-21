@@ -8,12 +8,11 @@ import {
   OneToMany,
   JoinColumn,
 } from 'typeorm';
-import { Parent } from '../entities/parent.entity';
+import { Parent } from './parent.entity';
 import { Gender } from '../enum/gender_t.enum';
-import { StudentParent } from '../entities/student-parent.entity';
-import { StudentClass } from '../entities/student-class.entity';
-import { Attendance } from '../entities/attendance.entity';
-import { StudentYearLevel } from '../entities/student-year-level.entity';
+import { StudentClass } from './student-class.entity';
+import { Attendance } from './attendance.entity';
+import { StudentYearLevel } from './student-year-level.entity';
 import { User } from './user.entity';
 
 @Entity('students')
@@ -55,7 +54,7 @@ export class Student {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
-  @ManyToMany(() => Parent, parent => parent.students)
+  @ManyToMany(() => Parent, (parent) => parent.students)
   @JoinTable({
     name: 'student_guardian',
     joinColumn: { name: 'student_id', referencedColumnName: 'id' },
@@ -63,12 +62,15 @@ export class Student {
   })
   parent: Parent[];
 
-  @OneToMany(() => StudentClass, studentClass => studentClass.student)
+  @OneToMany(() => StudentClass, (studentClass) => studentClass.student)
   studentClasses: StudentClass[];
 
-  @OneToMany(() => Attendance, attendance => attendance.student)
+  @OneToMany(() => Attendance, (attendance) => attendance.student)
   attendances: Attendance[];
 
-  @OneToMany(() => StudentYearLevel, studentYearLevel => studentYearLevel.student)
+  @OneToMany(
+    () => StudentYearLevel,
+    (studentYearLevel) => studentYearLevel.student,
+  )
   studentYearLevels: StudentYearLevel[];
 }

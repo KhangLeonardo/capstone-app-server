@@ -1,6 +1,5 @@
 export enum Status {
-    Present = 'Present',
-    Absent = 'Absent',
-    Late = 'Late',
-  }
-  
+  Present = 'Present',
+  Absent = 'Absent',
+  Late = 'Late',
+}

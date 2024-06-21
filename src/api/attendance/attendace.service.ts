@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAttendaceDto } from './dto/create-attendace.dto';
+import { CreateAttendanceDto } from './dto/create-attendace.dto';
 import { UpdateAttendaceDto } from './dto/update-attendace.dto';
 
 @Injectable()
 export class AttendaceService {
-  create(createAttendaceDto: CreateAttendaceDto) {
+  create(createAttendaceDto: CreateAttendanceDto) {
     return 'This action adds a new attendace';
   }
 

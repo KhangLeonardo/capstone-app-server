@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { MenuCategoryService } from './menu-category.service';
 import { CreateMenuCategoryDto } from './dto/create-menu-category.dto';
 import { UpdateMenuCategoryDto } from './dto/update-menu-category.dto';
@@ -23,7 +31,10 @@ export class MenuCategoryController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMenuCategoryDto: UpdateMenuCategoryDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateMenuCategoryDto: UpdateMenuCategoryDto,
+  ) {
     return this.menuCategoryService.update(+id, updateMenuCategoryDto);
   }
 

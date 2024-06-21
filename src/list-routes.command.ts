@@ -10,7 +10,7 @@ async function listRoutes() {
   const server = httpServer._router;
 
   const routes = [];
-  server.stack.forEach(layer => {
+  server.stack.forEach((layer) => {
     if (layer.route) {
       const path = layer.route.path;
       const method = Object.keys(layer.route.methods)[0].toUpperCase();
@@ -19,7 +19,7 @@ async function listRoutes() {
   });
 
   console.log(`Number of API routes: ${routes.length}`);
-  routes.forEach(route => {
+  routes.forEach((route) => {
     console.log(`${route.method} ${route.path}`);
   });
 
