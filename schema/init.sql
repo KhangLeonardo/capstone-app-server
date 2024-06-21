@@ -20,7 +20,7 @@ CREATE TABLE users (
 );
 
 -- Create user devices table
-CREATE TABLE user_devices (
+CREATE TABLE device_tokens (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users(id),
     device_type VARCHAR(255) NOT NULL,
@@ -200,3 +200,6 @@ INSERT INTO hashtags (tag) VALUES
 INSERT INTO school_admins (user_id, school_id) VALUES
 (4, 1),
 (5, 2);
+
+INSERT INTO device_tokens (user_id, device_type, token) VALUES
+(3, 'Android', 'fDpxKQniQLqttguDXuDxIm:APA91bHrKVBbywkLvBNWiZUFSqPXcfK5InoncK50aZakqzyVdvDC92UVCOHdtxDiPIwU62g88VCNEyAWVDQjhUyIJXPajv81jcZe_uZ0EYL2UZ55bDnS8qnx1g0Kv1ckVeazy-fXLKrz')
