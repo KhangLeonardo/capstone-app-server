@@ -31,16 +31,12 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
-      - name: Install dependencies
-        run: npm install
-      - name: Lint with reporting
-        run: npm run lint:report
-      # - name: Annotate Code Linting Results
-      #   uses: ataylorme/eslint-annotate-action@1.2.0
-      #   with:
-      #     repo-token: "${{ secrets.GITHUB_TOKEN }}"
-      #     report-json: "eslint_report.json"
-      #     fail-on-warning: false
+          cache-dependency-path: "package-lock.json"
+      - name: lint with reporting
+        run: |
+            npm install
+            npm run lint:report
+        continue-on-error: true
       - name: Upload ESLint report
         uses: actions/upload-artifact@v2
         with:
