@@ -8,10 +8,9 @@ import {
   Delete,
 } from '@nestjs/common';
 import { SubjectService } from './subject.service';
-import { CreateSubjectDto } from './dto/create-subject.dto';
-import { UpdateSubjectDto } from './dto/update-subject.dto';
+import { CreateSubjectDto, UpdateSubjectDto } from './dto/create-subject.dto';
 
-@Controller('subject')
+@Controller('subjects')
 export class SubjectController {
   constructor(private readonly subjectService: SubjectService) {}
 

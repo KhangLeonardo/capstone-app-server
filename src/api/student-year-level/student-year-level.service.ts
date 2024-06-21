@@ -1,26 +1,48 @@
 import { Injectable } from '@nestjs/common';
-import { CreateStudentYearLevelDto } from './dto/create-student-year-level.dto';
-import { UpdateStudentYearLevelDto } from './dto/update-student-year-level.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { StudentYearLevel } from '../../common/entities/student-year-level.entity';
+import {
+  CreateStudentYearLevelDto,
+  UpdateStudentYearLevelDto,
+} from './dto/create-student-year-level.dto';
 
 @Injectable()
 export class StudentYearLevelService {
+  constructor(
+    @InjectRepository(StudentYearLevel)
+    private studentYearLevelRepository: Repository<StudentYearLevel>,
+  ) {}
+
   create(createStudentYearLevelDto: CreateStudentYearLevelDto) {
-    return 'This action adds a new studentYearLevel';
+    const studentYearLevel = this.studentYearLevelRepository.create(
+      createStudentYearLevelDto,
+    );
+    return this.studentYearLevelRepository.save(studentYearLevel);
   }
 
   findAll() {
-    return `This action returns all studentYearLevel`;
+    return this.studentYearLevelRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} studentYearLevel`;
+  findOne(studentId: number, yearLevelId: number) {
+    return this.studentYearLevelRepository.findOne({
+      where: { studentId, yearLevelId },
+    });
   }
 
-  update(id: number, updateStudentYearLevelDto: UpdateStudentYearLevelDto) {
-    return `This action updates a #${id} studentYearLevel`;
+  update(
+    studentId: number,
+    yearLevelId: number,
+    updateStudentYearLevelDto: UpdateStudentYearLevelDto,
+  ) {
+    return this.studentYearLevelRepository.update(
+      { studentId, yearLevelId },
+      updateStudentYearLevelDto,
+    );
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} studentYearLevel`;
+  remove(studentId: number, yearLevelId: number) {
+    return this.studentYearLevelRepository.delete({ studentId, yearLevelId });
   }
 }

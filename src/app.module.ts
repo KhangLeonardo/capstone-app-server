@@ -23,7 +23,7 @@ import { StudentClassModule } from './api/student-class/student-class.module';
 import { MenuModule } from './api/menu/menu.module';
 import { MenuCategoryModule } from './api/menu-category/menu-category.module';
 import { MealModule } from './api/meal/meal.module';
-import { AttendaceModule } from './api/attendance/attendace.module';
+import { AttendanceModule } from './api/attendance/attendance.module';
 import { EventModule } from './api/event/event.module';
 import { DailyScheduleModule } from './api/daily-schedule/daily-schedule.module';
 import { AbsenceModule } from './api/absence/absence.module';
@@ -60,7 +60,7 @@ import { NotificationModule } from './api/notification/notification.module';
     MenuModule,
     MenuCategoryModule,
     MealModule,
-    AttendaceModule,
+    AttendanceModule,
     EventModule,
     DailyScheduleModule,
     AbsenceModule,

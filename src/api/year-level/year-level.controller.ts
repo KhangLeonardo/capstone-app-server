@@ -8,10 +8,12 @@ import {
   Delete,
 } from '@nestjs/common';
 import { YearLevelService } from './year-level.service';
-import { CreateYearLevelDto } from './dto/create-year-level.dto';
-import { UpdateYearLevelDto } from './dto/update-year-level.dto';
+import {
+  CreateYearLevelDto,
+  UpdateYearLevelDto,
+} from './dto/create-year-level.dto';
 
-@Controller('year-level')
+@Controller('year-levels')
 export class YearLevelController {
   constructor(private readonly yearLevelService: YearLevelService) {}
 

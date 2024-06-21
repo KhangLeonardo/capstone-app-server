@@ -1,26 +1,39 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMenuCategoryDto } from './dto/create-menu-category.dto';
-import { UpdateMenuCategoryDto } from './dto/update-menu-category.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { MenuCategory } from '../../common/entities/menu-category.entity';
+import {
+  CreateMenuCategoryDto,
+  UpdateMenuCategoryDto,
+} from './dto/create-menu-category.dto';
 
 @Injectable()
 export class MenuCategoryService {
+  constructor(
+    @InjectRepository(MenuCategory)
+    private menuCategoryRepository: Repository<MenuCategory>,
+  ) {}
+
   create(createMenuCategoryDto: CreateMenuCategoryDto) {
-    return 'This action adds a new menuCategory';
+    const menuCategory = this.menuCategoryRepository.create(
+      createMenuCategoryDto,
+    );
+    return this.menuCategoryRepository.save(menuCategory);
   }
 
   findAll() {
-    return `This action returns all menuCategory`;
+    return this.menuCategoryRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} menuCategory`;
+    return this.menuCategoryRepository.findOne({ where: { id: id } });
   }
 
   update(id: number, updateMenuCategoryDto: UpdateMenuCategoryDto) {
-    return `This action updates a #${id} menuCategory`;
+    return this.menuCategoryRepository.update(id, updateMenuCategoryDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} menuCategory`;
+    return this.menuCategoryRepository.delete(id);
   }
 }

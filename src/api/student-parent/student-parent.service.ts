@@ -1,26 +1,48 @@
 import { Injectable } from '@nestjs/common';
-import { CreateStudentParentDto } from './dto/create-student-parent.dto';
-import { UpdateStudentParentDto } from './dto/update-student-parent.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { StudentParent } from '../../common/entities/student-parent.entity';
+import {
+  CreateStudentParentDto,
+  UpdateStudentParentDto,
+} from './dto/create-student-parent.dto';
 
 @Injectable()
 export class StudentParentService {
+  constructor(
+    @InjectRepository(StudentParent)
+    private studentParentRepository: Repository<StudentParent>,
+  ) {}
+
   create(createStudentParentDto: CreateStudentParentDto) {
-    return 'This action adds a new studentParent';
+    const studentParent = this.studentParentRepository.create(
+      createStudentParentDto,
+    );
+    return this.studentParentRepository.save(studentParent);
   }
 
   findAll() {
-    return `This action returns all studentParent`;
+    return this.studentParentRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} studentParent`;
+  findOne(studentId: number, parentId: number) {
+    return this.studentParentRepository.findOne({
+      where: { studentId, parentId },
+    });
   }
 
-  update(id: number, updateStudentParentDto: UpdateStudentParentDto) {
-    return `This action updates a #${id} studentParent`;
+  update(
+    studentId: number,
+    parentId: number,
+    updateStudentParentDto: UpdateStudentParentDto,
+  ) {
+    return this.studentParentRepository.update(
+      { studentId, parentId },
+      updateStudentParentDto,
+    );
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} studentParent`;
+  remove(studentId: number, parentId: number) {
+    return this.studentParentRepository.delete({ studentId, parentId });
   }
 }

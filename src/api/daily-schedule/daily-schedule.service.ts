@@ -1,26 +1,39 @@
 import { Injectable } from '@nestjs/common';
-import { CreateDailyScheduleDto } from './dto/create-daily-schedule.dto';
-import { UpdateDailyScheduleDto } from './dto/update-daily-schedule.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { DailySchedule } from '../../common/entities/daily-schedule.entity';
+import {
+  CreateDailyScheduleDto,
+  UpdateDailyScheduleDto,
+} from './dto/create-daily-schedule.dto';
 
 @Injectable()
 export class DailyScheduleService {
+  constructor(
+    @InjectRepository(DailySchedule)
+    private dailyScheduleRepository: Repository<DailySchedule>,
+  ) {}
+
   create(createDailyScheduleDto: CreateDailyScheduleDto) {
-    return 'This action adds a new dailySchedule';
+    const schedule = this.dailyScheduleRepository.create(
+      createDailyScheduleDto,
+    );
+    return this.dailyScheduleRepository.save(schedule);
   }
 
   findAll() {
-    return `This action returns all dailySchedule`;
+    return this.dailyScheduleRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} dailySchedule`;
+    return this.dailyScheduleRepository.findOne({ where: { id: id } });
   }
 
   update(id: number, updateDailyScheduleDto: UpdateDailyScheduleDto) {
-    return `This action updates a #${id} dailySchedule`;
+    return this.dailyScheduleRepository.update(id, updateDailyScheduleDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} dailySchedule`;
+    return this.dailyScheduleRepository.delete(id);
   }
 }

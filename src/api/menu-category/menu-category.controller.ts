@@ -8,10 +8,12 @@ import {
   Delete,
 } from '@nestjs/common';
 import { MenuCategoryService } from './menu-category.service';
-import { CreateMenuCategoryDto } from './dto/create-menu-category.dto';
-import { UpdateMenuCategoryDto } from './dto/update-menu-category.dto';
+import {
+  CreateMenuCategoryDto,
+  UpdateMenuCategoryDto,
+} from './dto/create-menu-category.dto';
 
-@Controller('menu-category')
+@Controller('menu-categories')
 export class MenuCategoryController {
   constructor(private readonly menuCategoryService: MenuCategoryService) {}
 

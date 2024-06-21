@@ -12,10 +12,10 @@ export class DailySchedule {
   dayOfWeek: DayOfWeek;
 
   @Column()
-  startTime: string;
+  startTime: Date;
 
   @Column()
-  endTime: string;
+  endTime: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

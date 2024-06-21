@@ -1,26 +1,37 @@
 import { Injectable } from '@nestjs/common';
-import { CreateYearLevelDto } from './dto/create-year-level.dto';
-import { UpdateYearLevelDto } from './dto/update-year-level.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { YearLevel } from '../../common/entities/year-level.entity';
+import {
+  CreateYearLevelDto,
+  UpdateYearLevelDto,
+} from './dto/create-year-level.dto';
 
 @Injectable()
 export class YearLevelService {
+  constructor(
+    @InjectRepository(YearLevel)
+    private yearLevelRepository: Repository<YearLevel>,
+  ) {}
+
   create(createYearLevelDto: CreateYearLevelDto) {
-    return 'This action adds a new yearLevel';
+    const yearLevel = this.yearLevelRepository.create(createYearLevelDto);
+    return this.yearLevelRepository.save(yearLevel);
   }
 
   findAll() {
-    return `This action returns all yearLevel`;
+    return this.yearLevelRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} yearLevel`;
+    return this.yearLevelRepository.findOne({ where: { id: id } });
   }
 
   update(id: number, updateYearLevelDto: UpdateYearLevelDto) {
-    return `This action updates a #${id} yearLevel`;
+    return this.yearLevelRepository.update(id, updateYearLevelDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} yearLevel`;
+    return this.yearLevelRepository.delete(id);
   }
 }

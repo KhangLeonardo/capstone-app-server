@@ -8,16 +8,20 @@ import {
   Delete,
 } from '@nestjs/common';
 import { PeriodService } from './period.service';
-import { CreatePeriodDto } from './dto/create-period.dto';
-import { UpdatePeriodDto } from './dto/update-period.dto';
+import { CreatePeriodDto, UpdatePeriodDto } from './dto/create-period.dto';
 
-@Controller('period')
+@Controller('periods')
 export class PeriodController {
   constructor(private readonly periodService: PeriodService) {}
 
   @Post()
   create(@Body() createPeriodDto: CreatePeriodDto) {
-    return this.periodService.create(createPeriodDto);
+    const periodData = {
+      ...createPeriodDto,
+      startTime: new Date(createPeriodDto.startTime),
+      endTime: new Date(createPeriodDto.endTime),
+    };
+    return this.periodService.create(periodData);
   }
 
   @Get()
@@ -32,7 +36,16 @@ export class PeriodController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePeriodDto: UpdatePeriodDto) {
-    return this.periodService.update(+id, updatePeriodDto);
+    const periodData = {
+      ...updatePeriodDto,
+      startTime: updatePeriodDto.startTime
+        ? new Date(updatePeriodDto.startTime)
+        : undefined,
+      endTime: updatePeriodDto.endTime
+        ? new Date(updatePeriodDto.endTime)
+        : undefined,
+    };
+    return this.periodService.update(+id, periodData);
   }
 
   @Delete(':id')

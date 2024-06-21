@@ -8,10 +8,12 @@ import {
   Delete,
 } from '@nestjs/common';
 import { StudentYearLevelService } from './student-year-level.service';
-import { CreateStudentYearLevelDto } from './dto/create-student-year-level.dto';
-import { UpdateStudentYearLevelDto } from './dto/update-student-year-level.dto';
+import {
+  CreateStudentYearLevelDto,
+  UpdateStudentYearLevelDto,
+} from './dto/create-student-year-level.dto';
 
-@Controller('student-year-level')
+@Controller('student-year-levels')
 export class StudentYearLevelController {
   constructor(
     private readonly studentYearLevelService: StudentYearLevelService,
@@ -27,21 +29,32 @@ export class StudentYearLevelController {
     return this.studentYearLevelService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.studentYearLevelService.findOne(+id);
+  @Get(':studentId/:yearLevelId')
+  findOne(
+    @Param('studentId') studentId: string,
+    @Param('yearLevelId') yearLevelId: string,
+  ) {
+    return this.studentYearLevelService.findOne(+studentId, +yearLevelId);
   }
 
-  @Patch(':id')
+  @Patch(':studentId/:yearLevelId')
   update(
-    @Param('id') id: string,
+    @Param('studentId') studentId: string,
+    @Param('yearLevelId') yearLevelId: string,
     @Body() updateStudentYearLevelDto: UpdateStudentYearLevelDto,
   ) {
-    return this.studentYearLevelService.update(+id, updateStudentYearLevelDto);
+    return this.studentYearLevelService.update(
+      +studentId,
+      +yearLevelId,
+      updateStudentYearLevelDto,
+    );
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.studentYearLevelService.remove(+id);
+  @Delete(':studentId/:yearLevelId')
+  remove(
+    @Param('studentId') studentId: string,
+    @Param('yearLevelId') yearLevelId: string,
+  ) {
+    return this.studentYearLevelService.remove(+studentId, +yearLevelId);
   }
 }

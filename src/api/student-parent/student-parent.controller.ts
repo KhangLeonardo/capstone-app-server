@@ -8,10 +8,12 @@ import {
   Delete,
 } from '@nestjs/common';
 import { StudentParentService } from './student-parent.service';
-import { CreateStudentParentDto } from './dto/create-student-parent.dto';
-import { UpdateStudentParentDto } from './dto/update-student-parent.dto';
+import {
+  CreateStudentParentDto,
+  UpdateStudentParentDto,
+} from './dto/create-student-parent.dto';
 
-@Controller('student-parent')
+@Controller('student-parents')
 export class StudentParentController {
   constructor(private readonly studentParentService: StudentParentService) {}
 
@@ -25,21 +27,32 @@ export class StudentParentController {
     return this.studentParentService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.studentParentService.findOne(+id);
+  @Get(':studentId/:parentId')
+  findOne(
+    @Param('studentId') studentId: string,
+    @Param('parentId') parentId: string,
+  ) {
+    return this.studentParentService.findOne(+studentId, +parentId);
   }
 
-  @Patch(':id')
+  @Patch(':studentId/:parentId')
   update(
-    @Param('id') id: string,
+    @Param('studentId') studentId: string,
+    @Param('parentId') parentId: string,
     @Body() updateStudentParentDto: UpdateStudentParentDto,
   ) {
-    return this.studentParentService.update(+id, updateStudentParentDto);
+    return this.studentParentService.update(
+      +studentId,
+      +parentId,
+      updateStudentParentDto,
+    );
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.studentParentService.remove(+id);
+  @Delete(':studentId/:parentId')
+  remove(
+    @Param('studentId') studentId: string,
+    @Param('parentId') parentId: string,
+  ) {
+    return this.studentParentService.remove(+studentId, +parentId);
   }
 }
