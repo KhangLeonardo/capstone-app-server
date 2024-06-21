@@ -8,10 +8,9 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ParentService } from './parent.service';
-import { CreateParentDto } from './dto/create-parent.dto';
-import { UpdateParentDto } from './dto/update-parent.dto';
+import { CreateParentDto, UpdateParentDto } from './dto/create-parent.dto';
 
-@Controller('parent')
+@Controller('parents')
 export class ParentController {
   constructor(private readonly parentService: ParentService) {}
 

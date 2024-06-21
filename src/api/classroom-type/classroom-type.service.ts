@@ -1,26 +1,39 @@
 import { Injectable } from '@nestjs/common';
-import { CreateClassroomTypeDto } from './dto/create-classroom-type.dto';
-import { UpdateClassroomTypeDto } from './dto/update-classroom-type.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { ClassroomType } from '../../common/entities/classroom-types.entity';
+import {
+  CreateClassroomTypeDto,
+  UpdateClassroomTypeDto,
+} from './dto/create-classroom-type.dto';
 
 @Injectable()
 export class ClassroomTypeService {
+  constructor(
+    @InjectRepository(ClassroomType)
+    private classroomTypeRepository: Repository<ClassroomType>,
+  ) {}
+
   create(createClassroomTypeDto: CreateClassroomTypeDto) {
-    return 'This action adds a new classroomType';
+    const classroomType = this.classroomTypeRepository.create(
+      createClassroomTypeDto,
+    );
+    return this.classroomTypeRepository.save(classroomType);
   }
 
   findAll() {
-    return `This action returns all classroomType`;
+    return this.classroomTypeRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} classroomType`;
+    return this.classroomTypeRepository.findOne({ where: { id: id } });
   }
 
   update(id: number, updateClassroomTypeDto: UpdateClassroomTypeDto) {
-    return `This action updates a #${id} classroomType`;
+    return this.classroomTypeRepository.update(id, updateClassroomTypeDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} classroomType`;
+    return this.classroomTypeRepository.delete(id);
   }
 }

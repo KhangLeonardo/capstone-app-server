@@ -12,10 +12,10 @@ export class CreateDailyScheduleDto {
   dayOfWeek: DayOfWeek;
 
   @IsDate()
-  startTime: string;
+  startTime: Date;
 
   @IsDate()
-  endTime: string;
+  endTime: Date;
 }
 
 export class UpdateDailyScheduleDto {
@@ -33,9 +33,9 @@ export class UpdateDailyScheduleDto {
 
   @IsOptional()
   @IsDate()
-  startTime?: string;
+  startTime?: Date;
 
   @IsOptional()
   @IsDate()
-  endTime?: string;
+  endTime?: Date;
 }

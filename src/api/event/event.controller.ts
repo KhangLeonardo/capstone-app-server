@@ -8,16 +8,20 @@ import {
   Delete,
 } from '@nestjs/common';
 import { EventService } from './event.service';
-import { CreateEventDto } from './dto/create-event.dto';
-import { UpdateEventDto } from './dto/update-event.dto';
+import { CreateEventDto, UpdateEventDto } from './dto/create-event.dto';
 
-@Controller('event')
+@Controller('events')
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 
   @Post()
   create(@Body() createEventDto: CreateEventDto) {
-    return this.eventService.create(createEventDto);
+    const eventData = {
+      ...createEventDto,
+      startDate: new Date(createEventDto.startDate),
+      endDate: new Date(createEventDto.endDate),
+    };
+    return this.eventService.create(eventData);
   }
 
   @Get()
@@ -32,7 +36,16 @@ export class EventController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateEventDto: UpdateEventDto) {
-    return this.eventService.update(+id, updateEventDto);
+    const eventData = {
+      ...updateEventDto,
+      startDate: updateEventDto.startDate
+        ? new Date(updateEventDto.startDate)
+        : undefined,
+      endDate: updateEventDto.endDate
+        ? new Date(updateEventDto.endDate)
+        : undefined,
+    };
+    return this.eventService.update(+id, eventData);
   }
 
   @Delete(':id')

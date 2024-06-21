@@ -8,10 +8,12 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ClassroomService } from './classroom.service';
-import { CreateClassroomDto } from './dto/create-classroom.dto';
-import { UpdateClassroomDto } from './dto/update-classroom.dto';
+import {
+  CreateClassroomDto,
+  UpdateClassroomDto,
+} from './dto/create-classroom.dto';
 
-@Controller('classroom')
+@Controller('classrooms')
 export class ClassroomController {
   constructor(private readonly classroomService: ClassroomService) {}
 

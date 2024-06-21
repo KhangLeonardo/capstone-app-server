@@ -1,26 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTermDto } from './dto/create-term.dto';
-import { UpdateTermDto } from './dto/update-term.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Term } from '../../common/entities/term.entity';
+import { CreateTermDto, UpdateTermDto } from './dto/create-term.dto';
 
 @Injectable()
 export class TermService {
+  constructor(
+    @InjectRepository(Term)
+    private termRepository: Repository<Term>,
+  ) {}
+
   create(createTermDto: CreateTermDto) {
-    return 'This action adds a new term';
+    const term = this.termRepository.create(createTermDto);
+    return this.termRepository.save(term);
   }
 
   findAll() {
-    return `This action returns all term`;
+    return this.termRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} term`;
+    return this.termRepository.findOne({ where: { id: id } });
   }
 
   update(id: number, updateTermDto: UpdateTermDto) {
-    return `This action updates a #${id} term`;
+    return this.termRepository.update(id, updateTermDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} term`;
+    return this.termRepository.delete(id);
   }
 }

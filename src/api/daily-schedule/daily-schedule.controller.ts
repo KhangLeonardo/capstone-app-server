@@ -8,16 +8,23 @@ import {
   Delete,
 } from '@nestjs/common';
 import { DailyScheduleService } from './daily-schedule.service';
-import { CreateDailyScheduleDto } from './dto/create-daily-schedule.dto';
-import { UpdateDailyScheduleDto } from './dto/update-daily-schedule.dto';
+import {
+  CreateDailyScheduleDto,
+  UpdateDailyScheduleDto,
+} from './dto/create-daily-schedule.dto';
 
-@Controller('daily-schedule')
+@Controller('daily-schedules')
 export class DailyScheduleController {
   constructor(private readonly dailyScheduleService: DailyScheduleService) {}
 
   @Post()
   create(@Body() createDailyScheduleDto: CreateDailyScheduleDto) {
-    return this.dailyScheduleService.create(createDailyScheduleDto);
+    const scheduleData = {
+      ...createDailyScheduleDto,
+      startTime: new Date(createDailyScheduleDto.startTime),
+      endTime: new Date(createDailyScheduleDto.endTime),
+    };
+    return this.dailyScheduleService.create(scheduleData);
   }
 
   @Get()
@@ -35,7 +42,16 @@ export class DailyScheduleController {
     @Param('id') id: string,
     @Body() updateDailyScheduleDto: UpdateDailyScheduleDto,
   ) {
-    return this.dailyScheduleService.update(+id, updateDailyScheduleDto);
+    const scheduleData = {
+      ...updateDailyScheduleDto,
+      startTime: updateDailyScheduleDto.startTime
+        ? new Date(updateDailyScheduleDto.startTime)
+        : undefined,
+      endTime: updateDailyScheduleDto.endTime
+        ? new Date(updateDailyScheduleDto.endTime)
+        : undefined,
+    };
+    return this.dailyScheduleService.update(+id, scheduleData);
   }
 
   @Delete(':id')

@@ -8,10 +8,9 @@ import {
   Delete,
 } from '@nestjs/common';
 import { AbsenceService } from './absence.service';
-import { CreateAbsenceDto } from './dto/create-absence.dto';
-import { UpdateAbsenceDto } from './dto/update-absence.dto';
+import { CreateAbsenceDto, UpdateAbsenceDto } from './dto/create-absence.dto';
 
-@Controller('absence')
+@Controller('absences')
 export class AbsenceController {
   constructor(private readonly absenceService: AbsenceService) {}
 

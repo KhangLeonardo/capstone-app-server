@@ -8,10 +8,12 @@ import {
   Delete,
 } from '@nestjs/common';
 import { StudentClassService } from './student-class.service';
-import { CreateStudentClassDto } from './dto/create-student-class.dto';
-import { UpdateStudentClassDto } from './dto/update-student-class.dto';
+import {
+  CreateStudentClassDto,
+  UpdateStudentClassDto,
+} from './dto/create-student-class.dto';
 
-@Controller('student-class')
+@Controller('student-classes')
 export class StudentClassController {
   constructor(private readonly studentClassService: StudentClassService) {}
 
@@ -25,21 +27,32 @@ export class StudentClassController {
     return this.studentClassService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.studentClassService.findOne(+id);
+  @Get(':studentId/:classId')
+  findOne(
+    @Param('studentId') studentId: string,
+    @Param('classId') classId: string,
+  ) {
+    return this.studentClassService.findOne(+studentId, +classId);
   }
 
-  @Patch(':id')
+  @Patch(':studentId/:classId')
   update(
-    @Param('id') id: string,
+    @Param('studentId') studentId: string,
+    @Param('classId') classId: string,
     @Body() updateStudentClassDto: UpdateStudentClassDto,
   ) {
-    return this.studentClassService.update(+id, updateStudentClassDto);
+    return this.studentClassService.update(
+      +studentId,
+      +classId,
+      updateStudentClassDto,
+    );
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.studentClassService.remove(+id);
+  @Delete(':studentId/:classId')
+  remove(
+    @Param('studentId') studentId: string,
+    @Param('classId') classId: string,
+  ) {
+    return this.studentClassService.remove(+studentId, +classId);
   }
 }

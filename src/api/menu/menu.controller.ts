@@ -8,16 +8,20 @@ import {
   Delete,
 } from '@nestjs/common';
 import { MenuService } from './menu.service';
-import { CreateMenuDto } from './dto/create-menu.dto';
-import { UpdateMenuDto } from './dto/update-menu.dto';
+import { CreateMenuDto, UpdateMenuDto } from './dto/create-menu.dto';
 
-@Controller('menu')
+@Controller('menus')
 export class MenuController {
   constructor(private readonly menuService: MenuService) {}
 
   @Post()
   create(@Body() createMenuDto: CreateMenuDto) {
-    return this.menuService.create(createMenuDto);
+    const menuData = {
+      ...createMenuDto,
+      startTime: new Date(createMenuDto.startTime),
+      endTime: new Date(createMenuDto.endTime),
+    };
+    return this.menuService.create(menuData);
   }
 
   @Get()
@@ -32,7 +36,16 @@ export class MenuController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateMenuDto: UpdateMenuDto) {
-    return this.menuService.update(+id, updateMenuDto);
+    const menuData = {
+      ...updateMenuDto,
+      startTime: updateMenuDto.startTime
+        ? new Date(updateMenuDto.startTime)
+        : undefined,
+      endTime: updateMenuDto.endTime
+        ? new Date(updateMenuDto.endTime)
+        : undefined,
+    };
+    return this.menuService.update(+id, menuData);
   }
 
   @Delete(':id')

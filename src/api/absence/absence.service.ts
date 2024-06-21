@@ -1,26 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAbsenceDto } from './dto/create-absence.dto';
-import { UpdateAbsenceDto } from './dto/update-absence.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Absence } from '../../common/entities/absence.entity';
+import { CreateAbsenceDto, UpdateAbsenceDto } from './dto/create-absence.dto';
 
 @Injectable()
 export class AbsenceService {
+  constructor(
+    @InjectRepository(Absence)
+    private absenceRepository: Repository<Absence>,
+  ) {}
+
   create(createAbsenceDto: CreateAbsenceDto) {
-    return 'This action adds a new absence';
+    const absence = this.absenceRepository.create(createAbsenceDto);
+    return this.absenceRepository.save(absence);
   }
 
   findAll() {
-    return `This action returns all absence`;
+    return this.absenceRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} absence`;
+    return this.absenceRepository.findOne({ where: { id: id } });
   }
 
   update(id: number, updateAbsenceDto: UpdateAbsenceDto) {
-    return `This action updates a #${id} absence`;
+    return this.absenceRepository.update(id, updateAbsenceDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} absence`;
+    return this.absenceRepository.delete(id);
   }
 }

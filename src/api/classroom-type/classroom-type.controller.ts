@@ -8,10 +8,12 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ClassroomTypeService } from './classroom-type.service';
-import { CreateClassroomTypeDto } from './dto/create-classroom-type.dto';
-import { UpdateClassroomTypeDto } from './dto/update-classroom-type.dto';
+import {
+  CreateClassroomTypeDto,
+  UpdateClassroomTypeDto,
+} from './dto/create-classroom-type.dto';
 
-@Controller('classroom-type')
+@Controller('classroom-types')
 export class ClassroomTypeController {
   constructor(private readonly classroomTypeService: ClassroomTypeService) {}
 

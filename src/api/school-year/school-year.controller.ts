@@ -8,16 +8,23 @@ import {
   Delete,
 } from '@nestjs/common';
 import { SchoolYearService } from './school-year.service';
-import { CreateSchoolYearDto } from './dto/create-school-year.dto';
-import { UpdateSchoolYearDto } from './dto/update-school-year.dto';
+import {
+  CreateSchoolYearDto,
+  UpdateSchoolYearDto,
+} from './dto/create-school-year.dto';
 
-@Controller('school-year')
+@Controller('school-years')
 export class SchoolYearController {
   constructor(private readonly schoolYearService: SchoolYearService) {}
 
   @Post()
   create(@Body() createSchoolYearDto: CreateSchoolYearDto) {
-    return this.schoolYearService.create(createSchoolYearDto);
+    const schoolYearData = {
+      ...createSchoolYearDto,
+      startDate: new Date(createSchoolYearDto.startDate),
+      endDate: new Date(createSchoolYearDto.endDate),
+    };
+    return this.schoolYearService.create(schoolYearData);
   }
 
   @Get()
@@ -35,7 +42,16 @@ export class SchoolYearController {
     @Param('id') id: string,
     @Body() updateSchoolYearDto: UpdateSchoolYearDto,
   ) {
-    return this.schoolYearService.update(+id, updateSchoolYearDto);
+    const schoolYearData = {
+      ...updateSchoolYearDto,
+      startDate: updateSchoolYearDto.startDate
+        ? new Date(updateSchoolYearDto.startDate)
+        : undefined,
+      endDate: updateSchoolYearDto.endDate
+        ? new Date(updateSchoolYearDto.endDate)
+        : undefined,
+    };
+    return this.schoolYearService.update(+id, schoolYearData);
   }
 
   @Delete(':id')

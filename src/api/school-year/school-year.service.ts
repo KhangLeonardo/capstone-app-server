@@ -1,26 +1,37 @@
 import { Injectable } from '@nestjs/common';
-import { CreateSchoolYearDto } from './dto/create-school-year.dto';
-import { UpdateSchoolYearDto } from './dto/update-school-year.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { SchoolYear } from '../../common/entities/school-year.entity';
+import {
+  CreateSchoolYearDto,
+  UpdateSchoolYearDto,
+} from './dto/create-school-year.dto';
 
 @Injectable()
 export class SchoolYearService {
+  constructor(
+    @InjectRepository(SchoolYear)
+    private schoolYearRepository: Repository<SchoolYear>,
+  ) {}
+
   create(createSchoolYearDto: CreateSchoolYearDto) {
-    return 'This action adds a new schoolYear';
+    const schoolYear = this.schoolYearRepository.create(createSchoolYearDto);
+    return this.schoolYearRepository.save(schoolYear);
   }
 
   findAll() {
-    return `This action returns all schoolYear`;
+    return this.schoolYearRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} schoolYear`;
+    return this.schoolYearRepository.findOne({ where: { id: id } });
   }
 
   update(id: number, updateSchoolYearDto: UpdateSchoolYearDto) {
-    return `This action updates a #${id} schoolYear`;
+    return this.schoolYearRepository.update(id, updateSchoolYearDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} schoolYear`;
+    return this.schoolYearRepository.delete(id);
   }
 }
