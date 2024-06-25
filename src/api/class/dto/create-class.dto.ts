@@ -5,22 +5,22 @@ export class CreateClassDto {
   name: string;
 
   @IsInt()
-  subjectId: number;
+  subject_id: number;
 
   @IsInt()
-  teacherId: number;
+  teacher_id: number;
 
   @IsInt()
-  termId: number;
+  term_id: number;
 
   @IsInt()
-  classroomId: number;
+  classroom_id: number;
 
   @IsDate()
-  startTime: Date;
+  start_time: Date;
 
   @IsDate()
-  endTime: Date;
+  end_time: Date;
 }
 
 export class UpdateClassDto {
@@ -30,25 +30,25 @@ export class UpdateClassDto {
 
   @IsOptional()
   @IsInt()
-  subjectId?: number;
+  subject_id?: number;
 
   @IsOptional()
   @IsInt()
-  teacherId?: number;
+  teacher_id?: number;
 
   @IsOptional()
   @IsInt()
-  termId?: number;
+  term_id?: number;
 
   @IsOptional()
   @IsInt()
-  classroomId?: number;
+  classroom_id?: number;
 
   @IsOptional()
   @IsDate()
-  startTime?: Date;
+  start_time?: Date;
 
   @IsOptional()
   @IsDate()
-  endTime?: Date;
+  end_time?: Date;
 }

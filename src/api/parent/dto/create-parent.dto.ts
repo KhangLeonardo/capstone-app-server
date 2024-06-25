@@ -1,42 +1,42 @@
-import { IsString, IsEmail, IsOptional, IsInt } from 'class-validator';
+import { IsString, IsEmail, IsOptional } from 'class-validator';
 
 export class CreateParentDto {
   @IsString()
-  givenName: string;
+  full_name: string;
 
   @IsString()
-  surname: string;
+  first_name: string;
+
+  @IsString()
+  last_name: string;
 
   @IsOptional()
   @IsEmail()
-  emailAddress?: string;
+  email?: string;
 
   @IsOptional()
   @IsString()
-  phoneNumber?: string;
-
-  @IsInt()
-  parentTypeId: number;
+  phone_number?: string;
 }
 
 export class UpdateParentDto {
   @IsOptional()
   @IsString()
-  givenName?: string;
+  fullname?: string;
 
   @IsOptional()
   @IsString()
-  surname?: string;
+  first_name?: string;
+
+  @IsOptional()
+  @IsString()
+  last_name?: string;
 
   @IsOptional()
   @IsEmail()
-  emailAddress?: string;
+  email?: string;
 
   @IsOptional()
   @IsString()
-  phoneNumber?: string;
-
-  @IsOptional()
-  @IsInt()
-  parentTypeId?: number;
+  phone_number?: string;
 }

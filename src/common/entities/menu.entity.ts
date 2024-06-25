@@ -4,6 +4,7 @@ import {
   Column,
   ManyToOne,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 import { MenuCategory } from './menu-category.entity';
 import { Meal } from './meal.entity';
@@ -17,27 +18,25 @@ export class Menu {
   name: string;
 
   @Column()
-  timeRange: string;
+  time_range: string;
 
   @Column({ nullable: true })
   description: string;
 
-  @Column({ nullable: true })
-  nutritionInfo: string;
+  @Column()
+  start_time: Date;
 
   @Column()
-  startTime: Date;
-
-  @Column()
-  endTime: Date;
+  end_time: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
+  created_at: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  updatedAt: Date;
+  updated_at: Date;
 
   @ManyToOne(() => MenuCategory, (menuCategory) => menuCategory.menus)
+  @JoinColumn({ name: 'menu_category_id' }) // Assuming menu_category_id column is used
   menuCategory: MenuCategory;
 
   @OneToMany(() => Meal, (meal) => meal.menu)

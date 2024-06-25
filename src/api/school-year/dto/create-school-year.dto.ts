@@ -2,22 +2,22 @@ import { IsString, IsDate } from 'class-validator';
 
 export class CreateSchoolYearDto {
   @IsString()
-  yearName: string;
+  year: string;
 
   @IsDate()
-  startDate: Date;
+  start_date: Date;
 
   @IsDate()
-  endDate: Date;
+  end_date: Date;
 }
 
 export class UpdateSchoolYearDto {
   @IsString()
-  yearName?: string;
+  year?: string;
 
   @IsDate()
-  startDate?: Date;
+  start_date?: Date;
 
   @IsDate()
-  endDate?: Date;
+  end_date?: Date;
 }

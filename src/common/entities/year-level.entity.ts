@@ -7,19 +7,10 @@ export class YearLevel {
   id: number;
 
   @Column()
-  levelName: string;
+  level_name: string;
 
   @Column()
-  levelOrder: number;
-
-  @Column({ nullable: true })
-  scoreRangeMin: number;
-
-  @Column({ nullable: true })
-  scoreRangeMax: number;
-
-  @Column({ nullable: true })
-  grade: string;
+  level_order: number;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

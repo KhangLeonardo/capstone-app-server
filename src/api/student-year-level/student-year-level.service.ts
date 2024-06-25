@@ -25,24 +25,27 @@ export class StudentYearLevelService {
     return this.studentYearLevelRepository.find();
   }
 
-  findOne(studentId: number, yearLevelId: number) {
+  findOne(student_id: number, year_level_id: number) {
     return this.studentYearLevelRepository.findOne({
-      where: { studentId, yearLevelId },
+      where: { student_id, year_level_id },
     });
   }
 
   update(
-    studentId: number,
-    yearLevelId: number,
+    student_id: number,
+    year_level_id: number,
     updateStudentYearLevelDto: UpdateStudentYearLevelDto,
   ) {
     return this.studentYearLevelRepository.update(
-      { studentId, yearLevelId },
+      { student_id, year_level_id },
       updateStudentYearLevelDto,
     );
   }
 
-  remove(studentId: number, yearLevelId: number) {
-    return this.studentYearLevelRepository.delete({ studentId, yearLevelId });
+  remove(student_id: number, year_level_id: number) {
+    return this.studentYearLevelRepository.delete({
+      student_id,
+      year_level_id,
+    });
   }
 }
