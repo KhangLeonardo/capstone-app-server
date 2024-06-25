@@ -28,6 +28,7 @@ import { EventModule } from './api/event/event.module';
 import { DailyScheduleModule } from './api/daily-schedule/daily-schedule.module';
 import { AbsenceModule } from './api/absence/absence.module';
 import { PeriodModule } from './api/period/period.module';
+import { SeedingModule } from './migrations/seeding/seeding.module';
 
 @Module({
   imports: [
@@ -64,6 +65,7 @@ import { PeriodModule } from './api/period/period.module';
     DailyScheduleModule,
     AbsenceModule,
     PeriodModule,
+    SeedingModule,
   ],
   controllers: [],
   providers: [],

@@ -13,10 +13,10 @@ export class YearLevel {
   level_order: number;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
+  created_at: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  updatedAt: Date;
+  updated_at: Date;
 
   @OneToMany(
     () => StudentYearLevel,
