@@ -21,8 +21,8 @@ export class DailyScheduleController {
   create(@Body() createDailyScheduleDto: CreateDailyScheduleDto) {
     const scheduleData = {
       ...createDailyScheduleDto,
-      startTime: new Date(createDailyScheduleDto.startTime),
-      endTime: new Date(createDailyScheduleDto.endTime),
+      startTime: new Date(createDailyScheduleDto.start_time),
+      endTime: new Date(createDailyScheduleDto.end_time),
     };
     return this.dailyScheduleService.create(scheduleData);
   }
@@ -44,11 +44,11 @@ export class DailyScheduleController {
   ) {
     const scheduleData = {
       ...updateDailyScheduleDto,
-      startTime: updateDailyScheduleDto.startTime
-        ? new Date(updateDailyScheduleDto.startTime)
+      startTime: updateDailyScheduleDto.start_time
+        ? new Date(updateDailyScheduleDto.start_time)
         : undefined,
-      endTime: updateDailyScheduleDto.endTime
-        ? new Date(updateDailyScheduleDto.endTime)
+      endTime: updateDailyScheduleDto.end_time
+        ? new Date(updateDailyScheduleDto.end_time)
         : undefined,
     };
     return this.dailyScheduleService.update(+id, scheduleData);

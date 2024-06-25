@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Class } from './class.entity';
 
 @Entity()
 export class Subject {
@@ -6,11 +7,14 @@ export class Subject {
   id: number;
 
   @Column()
-  subjectName: string;
+  subject_name: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
+  created_at: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  updatedAt: Date;
+  updated_at: Date;
+
+  @OneToMany(() => Class, (classEntity) => classEntity.subject)
+  classes: Class[];
 }

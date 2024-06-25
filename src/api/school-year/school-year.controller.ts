@@ -21,8 +21,8 @@ export class SchoolYearController {
   create(@Body() createSchoolYearDto: CreateSchoolYearDto) {
     const schoolYearData = {
       ...createSchoolYearDto,
-      startDate: new Date(createSchoolYearDto.startDate),
-      endDate: new Date(createSchoolYearDto.endDate),
+      start_date: new Date(createSchoolYearDto.start_date),
+      end_date: new Date(createSchoolYearDto.end_date),
     };
     return this.schoolYearService.create(schoolYearData);
   }
@@ -44,11 +44,11 @@ export class SchoolYearController {
   ) {
     const schoolYearData = {
       ...updateSchoolYearDto,
-      startDate: updateSchoolYearDto.startDate
-        ? new Date(updateSchoolYearDto.startDate)
+      start_date: updateSchoolYearDto.start_date
+        ? new Date(updateSchoolYearDto.start_date)
         : undefined,
-      endDate: updateSchoolYearDto.endDate
-        ? new Date(updateSchoolYearDto.endDate)
+      endDate: updateSchoolYearDto.end_date
+        ? new Date(updateSchoolYearDto.end_date)
         : undefined,
     };
     return this.schoolYearService.update(+id, schoolYearData);

@@ -8,10 +8,13 @@ export class Teacher {
   id: number;
 
   @Column()
-  givenName: string;
+  full_name: string;
 
   @Column()
-  surname: string;
+  first_name: string;
+
+  @Column()
+  last_name: string;
 
   @Column({ nullable: true })
   age: number;
@@ -26,13 +29,13 @@ export class Teacher {
   phone: string;
 
   @Column()
-  dateOfBirth: Date;
+  date_of_birth: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
+  created_at: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  updatedAt: Date;
+  updated_at: Date;
 
   @OneToMany(() => Class, (classEntity) => classEntity.teacher)
   classes: Class[];

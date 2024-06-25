@@ -4,6 +4,7 @@ import {
   Column,
   ManyToMany,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 import { Student } from './student.entity';
 import { StudentParent } from './student-parent.entity';
@@ -14,26 +15,30 @@ export class Parent {
   id: number;
 
   @Column()
-  givenName: string;
+  full_name: string;
 
   @Column()
-  surname: string;
+  first_name: string;
+
+  @Column()
+  last_name: string;
 
   @Column({ nullable: true })
-  emailAddress: string;
+  email: string;
 
   @Column({ nullable: true })
-  phoneNumber: string;
+  phone_number: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
+  created_at: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  updatedAt: Date;
+  updated_at: Date;
 
   @ManyToMany(() => Student, (student) => student.parent)
+  @JoinColumn()
   students: Student[];
 
-  @OneToMany(() => StudentParent, (studentGuardian) => studentGuardian.parent)
+  @OneToMany(() => StudentParent, (studentParent) => studentParent.parent)
   studentParent: StudentParent[];
 }

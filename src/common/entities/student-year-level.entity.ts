@@ -1,28 +1,41 @@
-import { Entity, PrimaryColumn, Column, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Student } from './student.entity';
 import { YearLevel } from './year-level.entity';
 
 @Entity()
 export class StudentYearLevel {
   @PrimaryColumn()
-  studentId: number;
+  student_id: number;
 
   @PrimaryColumn()
-  yearLevelId: number;
+  year_level_id: number;
 
-  @Column()
+  @Column({ nullable: true })
   score: number;
 
-  @Column()
-  enrolmentDate: Date;
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  created_at: Date;
+
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updated_at: Date;
 
   @ManyToOne(() => Student, (student) => student.studentYearLevels, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'student_id' })
   student: Student;
 
   @ManyToOne(() => YearLevel, (yearLevel) => yearLevel.studentYearLevels, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'year_level_id' })
   yearLevel: YearLevel;
 }

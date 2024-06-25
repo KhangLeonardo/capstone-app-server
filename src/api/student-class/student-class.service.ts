@@ -25,24 +25,24 @@ export class StudentClassService {
     return this.studentClassRepository.find();
   }
 
-  findOne(studentId: number, classId: number) {
+  findOne(student_id: number, class_id: number) {
     return this.studentClassRepository.findOne({
-      where: { studentId, classId },
+      where: { student_id, class_id },
     });
   }
 
   update(
-    studentId: number,
-    classId: number,
+    student_id: number,
+    class_id: number,
     updateStudentClassDto: UpdateStudentClassDto,
   ) {
     return this.studentClassRepository.update(
-      { studentId, classId },
+      { student_id, class_id },
       updateStudentClassDto,
     );
   }
 
-  remove(studentId: number, classId: number) {
-    return this.studentClassRepository.delete({ studentId, classId });
+  remove(student_id: number, class_id: number) {
+    return this.studentClassRepository.delete({ student_id, class_id });
   }
 }

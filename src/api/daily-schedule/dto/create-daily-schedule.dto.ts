@@ -3,39 +3,39 @@ import { DayOfWeek } from '../../.././common/enum/day_of_week.enum';
 
 export class CreateDailyScheduleDto {
   @IsInt()
-  classId: number;
+  class_id: number;
 
   @IsInt()
-  periodId: number;
+  period_id: number;
 
   @IsEnum(DayOfWeek)
-  dayOfWeek: DayOfWeek;
+  day_of_week: DayOfWeek;
 
   @IsDate()
-  startTime: Date;
+  start_time: Date;
 
   @IsDate()
-  endTime: Date;
+  end_time: Date;
 }
 
 export class UpdateDailyScheduleDto {
   @IsOptional()
   @IsInt()
-  classId?: number;
+  class_id?: number;
 
   @IsOptional()
   @IsInt()
-  periodId?: number;
+  period_id?: number;
 
   @IsOptional()
   @IsEnum(DayOfWeek)
-  dayOfWeek?: DayOfWeek;
+  day_of_week?: DayOfWeek;
 
   @IsOptional()
   @IsDate()
-  startTime?: Date;
+  start_time?: Date;
 
   @IsOptional()
   @IsDate()
-  endTime?: Date;
+  end_time?: Date;
 }

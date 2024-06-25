@@ -4,6 +4,7 @@ import {
   Column,
   ManyToOne,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 import { SchoolYear } from './school-year.entity';
 import { Class } from './class.entity';
@@ -14,23 +15,24 @@ export class Term {
   id: number;
 
   @Column()
-  startDate: Date;
+  start_date: Date;
 
   @Column()
-  endDate: Date;
+  end_date: Date;
 
   @Column()
-  termNumber: number;
+  term_number: number;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
+  created_at: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  updatedAt: Date;
+  updated_at: Date;
 
   @ManyToOne(() => SchoolYear, (schoolYear) => schoolYear.terms, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'school_year_id' })
   schoolYear: SchoolYear;
 
   @OneToMany(() => Class, (classEntity) => classEntity.term)

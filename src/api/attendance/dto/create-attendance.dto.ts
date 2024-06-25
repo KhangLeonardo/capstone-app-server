@@ -3,10 +3,10 @@ import { Status } from '../../../common/enum/status_t.enum';
 
 export class CreateAttendanceDto {
   @IsInt()
-  studentId: number;
+  student_id: number;
 
   @IsInt()
-  classId: number;
+  class_id: number;
 
   @IsDate()
   date: Date;
@@ -16,17 +16,17 @@ export class CreateAttendanceDto {
 
   @IsOptional()
   @IsInt()
-  absenceId?: number;
+  absence_id?: number;
 }
 
 export class UpdateAttendanceDto {
   @IsOptional()
   @IsInt()
-  studentId?: number;
+  student_id?: number;
 
   @IsOptional()
   @IsInt()
-  classId?: number;
+  class_id?: number;
 
   @IsOptional()
   @IsDate()
@@ -38,5 +38,5 @@ export class UpdateAttendanceDto {
 
   @IsOptional()
   @IsInt()
-  absenceId?: number;
+  absence_id?: number;
 }

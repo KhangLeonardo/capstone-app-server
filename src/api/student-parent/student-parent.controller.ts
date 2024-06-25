@@ -27,32 +27,32 @@ export class StudentParentController {
     return this.studentParentService.findAll();
   }
 
-  @Get(':studentId/:parentId')
+  @Get(':studentId/:parent_id')
   findOne(
     @Param('studentId') studentId: string,
-    @Param('parentId') parentId: string,
+    @Param('parent_id') parent_id: string,
   ) {
-    return this.studentParentService.findOne(+studentId, +parentId);
+    return this.studentParentService.findOne(+studentId, +parent_id);
   }
 
-  @Patch(':studentId/:parentId')
+  @Patch(':studentId/:parent_id')
   update(
     @Param('studentId') studentId: string,
-    @Param('parentId') parentId: string,
+    @Param('parent_id') parent_id: string,
     @Body() updateStudentParentDto: UpdateStudentParentDto,
   ) {
     return this.studentParentService.update(
       +studentId,
-      +parentId,
+      +parent_id,
       updateStudentParentDto,
     );
   }
 
-  @Delete(':studentId/:parentId')
+  @Delete(':studentId/:parent_id')
   remove(
     @Param('studentId') studentId: string,
-    @Param('parentId') parentId: string,
+    @Param('parent_id') parent_id: string,
   ) {
-    return this.studentParentService.remove(+studentId, +parentId);
+    return this.studentParentService.remove(+studentId, +parent_id);
   }
 }

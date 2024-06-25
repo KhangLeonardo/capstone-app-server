@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { Class } from './class.entity';
 import { Period } from './period.entity';
 import { DayOfWeek } from '../enum/day_of_week.enum';
@@ -9,27 +15,29 @@ export class DailySchedule {
   id: number;
 
   @Column({ type: 'enum', enum: DayOfWeek })
-  dayOfWeek: DayOfWeek;
+  day_of_week: DayOfWeek;
 
   @Column()
-  startTime: Date;
+  start_time: Date;
 
   @Column()
-  endTime: Date;
+  end_time: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
+  created_at: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  updatedAt: Date;
+  updated_at: Date;
 
   @ManyToOne(() => Class, (classEntity) => classEntity.dailySchedules, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'class_id' }) // Assuming class_id column is used
   classEntity: Class;
 
   @ManyToOne(() => Period, (period) => period.dailySchedules, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'period_id' }) // Assuming period_id column is used
   period: Period;
 }

@@ -2,42 +2,18 @@ import { IsString, IsInt, IsOptional } from 'class-validator';
 
 export class CreateYearLevelDto {
   @IsString()
-  levelName: string;
+  level_name: string;
 
   @IsInt()
-  levelOrder: number;
-
-  @IsOptional()
-  @IsInt()
-  scoreRangeMin?: number;
-
-  @IsOptional()
-  @IsInt()
-  scoreRangeMax?: number;
-
-  @IsOptional()
-  @IsString()
-  grade?: string;
+  level_order: number;
 }
 
 export class UpdateYearLevelDto {
   @IsOptional()
   @IsString()
-  levelName?: string;
+  level_name?: string;
 
   @IsOptional()
   @IsInt()
-  levelOrder?: number;
-
-  @IsOptional()
-  @IsInt()
-  scoreRangeMin?: number;
-
-  @IsOptional()
-  @IsInt()
-  scoreRangeMax?: number;
-
-  @IsOptional()
-  @IsString()
-  grade?: string;
+  level_order?: number;
 }
