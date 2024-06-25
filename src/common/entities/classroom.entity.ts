@@ -4,6 +4,7 @@ import {
   Column,
   ManyToOne,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 import { ClassroomType } from '../entities/classroom-types.entity';
 import { Class } from '../entities/class.entity';
@@ -26,12 +27,13 @@ export class Classroom {
   image: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
+  created_at: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  updatedAt: Date;
+  updated_at: Date;
 
   @ManyToOne(() => ClassroomType, (classroomType) => classroomType.classrooms)
+  @JoinColumn({ name: 'classroom_type_id' })
   classroomType: ClassroomType;
 
   @OneToMany(() => Class, (classEntity) => classEntity.classroom)

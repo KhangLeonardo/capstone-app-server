@@ -10,10 +10,10 @@ export class MenuCategory {
   name: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
+  created_at: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  updatedAt: Date;
+  update_at: Date;
 
   @OneToMany(() => Menu, (menu) => menu.menuCategory)
   menus: Menu[];

@@ -25,24 +25,24 @@ export class StudentParentService {
     return this.studentParentRepository.find();
   }
 
-  findOne(studentId: number, parentId: number) {
+  findOne(student_id: number, parent_id: number) {
     return this.studentParentRepository.findOne({
-      where: { studentId, parentId },
+      where: { student_id, parent_id },
     });
   }
 
   update(
-    studentId: number,
-    parentId: number,
+    student_id: number,
+    parent_id: number,
     updateStudentParentDto: UpdateStudentParentDto,
   ) {
     return this.studentParentRepository.update(
-      { studentId, parentId },
+      { student_id, parent_id },
       updateStudentParentDto,
     );
   }
 
-  remove(studentId: number, parentId: number) {
-    return this.studentParentRepository.delete({ studentId, parentId });
+  remove(student_id: number, parent_id: number) {
+    return this.studentParentRepository.delete({ student_id, parent_id });
   }
 }

@@ -1,31 +1,41 @@
-import { Entity, PrimaryColumn, Column, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Student } from './student.entity';
 import { Class } from './class.entity';
 
 @Entity()
 export class StudentClass {
   @PrimaryColumn()
-  studentId: number;
+  student_id: number;
 
   @PrimaryColumn()
-  classId: number;
+  class_id: number;
 
   @Column()
   score: number;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  created_at: Date;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  updatedAt: Date;
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updated_at: Date;
 
   @ManyToOne(() => Student, (student) => student.studentClasses, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'student_id' })
   student: Student;
 
   @ManyToOne(() => Class, (classEntity) => classEntity.studentClasses, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'class_id' })
   classEntity: Class;
 }
