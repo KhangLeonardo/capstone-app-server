@@ -12,14 +12,14 @@ export class Event {
   description: string;
 
   @Column()
-  startDate: Date;
+  start_date: Date;
 
   @Column()
-  endDate: Date;
+  end_date: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
+  created_at: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  updatedAt: Date;
+  updated_at: Date;
 }

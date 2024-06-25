@@ -7,13 +7,13 @@ export class ClassroomType {
   id: number;
 
   @Column()
-  typeName: string;
+  name: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
+  created_at: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  updatedAt: Date;
+  updated_at: Date;
 
   @OneToMany(() => Classroom, (classroom) => classroom.classroomType)
   classrooms: Classroom[];

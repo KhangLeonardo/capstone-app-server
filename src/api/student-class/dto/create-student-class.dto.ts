@@ -2,10 +2,10 @@ import { IsInt, IsOptional } from 'class-validator';
 
 export class CreateStudentClassDto {
   @IsInt()
-  studentId: number;
+  student_id: number;
 
   @IsInt()
-  classId: number;
+  class_id: number;
 
   @IsOptional()
   @IsInt()
@@ -15,11 +15,11 @@ export class CreateStudentClassDto {
 export class UpdateStudentClassDto {
   @IsOptional()
   @IsInt()
-  studentId?: number;
+  student_id?: number;
 
   @IsOptional()
   @IsInt()
-  classId?: number;
+  class_id?: number;
 
   @IsOptional()
   @IsInt()

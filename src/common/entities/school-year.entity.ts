@@ -8,19 +8,19 @@ export class SchoolYear {
   id: number;
 
   @Column()
-  yearName: string;
+  year: string;
 
   @Column()
-  startDate: Date;
+  start_date: Date;
 
   @Column()
-  endDate: Date;
+  end_date: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
+  created_at: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  updatedAt: Date;
+  updated_at: Date;
 
   @OneToMany(() => Term, (term) => term.schoolYear)
   terms: Term[];

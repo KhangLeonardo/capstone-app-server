@@ -2,11 +2,11 @@ import { IsString, IsOptional } from 'class-validator';
 
 export class CreateClassroomTypeDto {
   @IsString()
-  typeName: string;
+  name: string;
 }
 
 export class UpdateClassroomTypeDto {
   @IsOptional()
   @IsString()
-  typeName?: string;
+  name?: string;
 }

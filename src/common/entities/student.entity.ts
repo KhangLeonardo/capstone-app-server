@@ -14,6 +14,7 @@ import { StudentClass } from './student-class.entity';
 import { Attendance } from './attendance.entity';
 import { StudentYearLevel } from './student-year-level.entity';
 import { User } from './user.entity';
+import { StudentParent } from './student-parent.entity';
 
 @Entity('students')
 export class Student {
@@ -21,25 +22,25 @@ export class Student {
   id: number;
 
   @Column()
-  givenName: string;
+  full_name: string;
 
   @Column()
-  surname: string;
+  first_name: string;
 
   @Column({ nullable: true })
-  middleName: string;
+  last_name: string;
 
   @Column({ type: 'enum', enum: Gender })
   gender: Gender;
 
   @Column()
-  dateOfBirth: Date;
+  date_of_birth: Date;
 
   @Column({ nullable: true })
-  emailAddress: string;
+  email: string;
 
   @Column({ nullable: true })
-  phoneNumber: string;
+  phone_number: string;
 
   @Column({ nullable: false })
   school_id: number;
@@ -49,18 +50,21 @@ export class Student {
   user: User;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
+  created_at: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  updatedAt: Date;
+  updated_at: Date;
 
   @ManyToMany(() => Parent, (parent) => parent.students)
   @JoinTable({
-    name: 'student_guardian',
+    name: 'student_parent',
     joinColumn: { name: 'student_id', referencedColumnName: 'id' },
-    inverseJoinColumn: { name: 'guardian_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'parent_id', referencedColumnName: 'id' },
   })
   parent: Parent[];
+
+  @OneToMany(() => StudentParent, (studentParent) => studentParent.student)
+  studentParents: StudentParent[];
 
   @OneToMany(() => StudentClass, (studentClass) => studentClass.student)
   studentClasses: StudentClass[];

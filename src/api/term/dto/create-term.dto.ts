@@ -2,28 +2,28 @@ import { IsInt, IsDate } from 'class-validator';
 
 export class CreateTermDto {
   @IsInt()
-  yearId: number;
+  year_id: number;
 
   @IsDate()
-  startDate: Date;
+  start_date: Date;
 
   @IsDate()
-  endDate: Date;
+  end_daye: Date;
 
   @IsInt()
-  termNumber: number;
+  term_number: number;
 }
 
 export class UpdateTermDto {
   @IsInt()
-  yearId?: number;
+  year_id?: number;
 
   @IsDate()
-  startDate?: Date;
+  start_date?: Date;
 
   @IsDate()
-  endDate?: Date;
+  end_date?: Date;
 
   @IsInt()
-  termNumber?: number;
+  term_number?: number;
 }

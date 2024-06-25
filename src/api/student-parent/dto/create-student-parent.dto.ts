@@ -2,16 +2,16 @@ import { IsInt } from 'class-validator';
 
 export class CreateStudentParentDto {
   @IsInt()
-  studentId: number;
+  student_id: number;
 
   @IsInt()
-  guardianId: number;
+  parent_id: number;
 }
 
 export class UpdateStudentParentDto {
   @IsInt()
-  studentId: number;
+  student_id: number;
 
   @IsInt()
-  guardianId: number;
+  parent_id: number;
 }

@@ -2,28 +2,28 @@ import { IsInt, IsDate } from 'class-validator';
 
 export class CreateStudentYearLevelDto {
   @IsInt()
-  studentId: number;
+  student_id: number;
 
   @IsInt()
-  yearLevelId: number;
+  year_level_id: number;
 
   @IsInt()
   score: number;
 
   @IsDate()
-  enrolmentDate: Date;
+  enrolment_date: Date;
 }
 
 export class UpdateStudentYearLevelDto {
   @IsInt()
-  studentId?: number;
+  student_id?: number;
 
   @IsInt()
-  yearLevelId?: number;
+  year_level_id?: number;
 
   @IsInt()
   score?: number;
 
   @IsDate()
-  enrolmentDate?: Date;
+  enrolment_date?: Date;
 }

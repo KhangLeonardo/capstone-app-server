@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { Student } from './student.entity';
 import { Class } from './class.entity';
 import { Status } from '../enum/status_t.enum';
@@ -16,10 +22,10 @@ export class Attendance {
   status: Status;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
+  created_at: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  updatedAt: Date;
+  updated_at: Date;
 
   @ManyToOne(() => Student, (student) => student.attendances, {
     onDelete: 'CASCADE',
@@ -27,8 +33,10 @@ export class Attendance {
   student: Student;
 
   @ManyToOne(() => Class, (classEntity) => classEntity, { onDelete: 'CASCADE' })
-  classEntity: Class;
+  @JoinColumn({ name: 'class_id' })
+  class: Class;
 
   @ManyToOne(() => Absence, (absence) => absence.attendances)
+  @JoinColumn({ name: 'absence_id' })
   absence: Absence;
 }

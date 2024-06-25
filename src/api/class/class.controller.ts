@@ -18,8 +18,8 @@ export class ClassController {
   create(@Body() createClassDto: CreateClassDto) {
     const classData = {
       ...createClassDto,
-      startTime: new Date(createClassDto.startTime),
-      endTime: new Date(createClassDto.endTime),
+      start_time: new Date(createClassDto.start_time),
+      endTime: new Date(createClassDto.end_time),
     };
     return this.classService.create(classData);
   }
@@ -38,11 +38,11 @@ export class ClassController {
   update(@Param('id') id: string, @Body() updateClassDto: UpdateClassDto) {
     const classData = {
       ...updateClassDto,
-      startTime: updateClassDto.startTime
-        ? new Date(updateClassDto.startTime)
+      start_time: updateClassDto.start_time
+        ? new Date(updateClassDto.start_time)
         : undefined,
-      endTime: updateClassDto.endTime
-        ? new Date(updateClassDto.endTime)
+      endTime: updateClassDto.end_time
+        ? new Date(updateClassDto.end_time)
         : undefined,
     };
     return this.classService.update(+id, classData);
