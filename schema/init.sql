@@ -149,8 +149,8 @@ CREATE TABLE student_images (
 
 -- Create main image table 
 CREATE TABLE main_images (
-    post_image_id NOT NULL REFERENCES images(id),
-    student_image_id NOT NULL REFERENCES student_images(id),
+    post_image_id INTEGER NOT NULL REFERENCES images(id),
+    student_image_id INTEGER NOT NULL REFERENCES student_images(id),
     PRIMARY KEY (post_image_id, student_image_id)
 );
 
