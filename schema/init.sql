@@ -116,6 +116,8 @@ CREATE TABLE absence (
     PRIMARY KEY (student_id, class_id)
 );
 
+
+
 -- Create posts table
 CREATE TABLE posts (
     id SERIAL PRIMARY KEY,
@@ -129,13 +131,39 @@ CREATE TABLE posts (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create images table
+-- Create post images junction table
 CREATE TABLE images (
     id SERIAL PRIMARY KEY,
     url VARCHAR(255) NOT NULL,
     post_id INTEGER NOT NULL REFERENCES posts(id),
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Create student_image table
+CREATE TABLE student_images (
+    id SERIAL PRIMARY KEY,
+    url VARCHAR(255) NOT NULL,
+    student_id INTEGER NOT NULL REFERENCES students(id),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create main image table 
+CREATE TABLE main_images (
+    post_image_id NOT NULL REFERENCES images(id),
+    student_image_id NOT NULL REFERENCES student_images(id),
+    PRIMARY KEY (post_image_id, student_image_id)
+);
+
+
+-- Create videos junction table
+CREATE TABLE videos (
+    id SERIAL PRIMARY KEY,
+    url VARCHAR(255) NOT NULL,
+    post_id INTEGER REFERENCES posts(id),
+    student_id INTEGER REFERENCES students(id),
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
 
 -- Create hashtags table
 CREATE TABLE hashtags (
@@ -380,3 +408,22 @@ INSERT INTO hashtags (tag) VALUES
 INSERT INTO school_admins (user_id, school_id) VALUES
 (4, 1),
 (5, 2);
+
+-- Insert mock data into the images table with provided URLs
+INSERT INTO images (url, post_id) VALUES
+('https://engage-education.com/wp-content/uploads/2022/08/Private-School.jpg', 1),
+('https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Hibbing_High_School_2014.jpg/1200px-Hibbing_High_School_2014.jpg', 2),
+('https://www.mytonschool.co.uk/wp-content/uploads/2023/07/Website-main-photo-2-1247x827.jpg', 3);
+
+-- Insert mock data into the student_images table with provided URLs
+INSERT INTO student_images (url, student_id) VALUES
+('https://engage-education.com/wp-content/uploads/2022/08/Private-School.jpg', 1),
+('https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Hibbing_High_School_2014.jpg/1200px-Hibbing_High_School_2014.jpg', 2),
+('https://www.mytonschool.co.uk/wp-content/uploads/2023/07/Website-main-photo-2-1247x827.jpg', 3);
+
+-- Insert mock data into the main_images table
+INSERT INTO main_images (post_image_id, student_image_id) VALUES
+(1, 1),
+(2, 2),
+(3, 3);
+
