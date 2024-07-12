@@ -12,6 +12,7 @@ import { User } from './user.entity';
 import { School } from './school.entity';
 import { ClassStudent } from './class-student.entity';
 import { Absence } from './absence.entity';
+import { MedicalRequest } from './medical-request.entity';
 
 @Entity('students')
 export class Student {
@@ -41,6 +42,8 @@ export class Student {
   @OneToMany(() => Absence, (absence) => absence.student)
   absences: Absence[];
 
+  @OneToMany(() => MedicalRequest, medicalRequest => medicalRequest.student)
+  medicalRequests: MedicalRequest[];
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 
