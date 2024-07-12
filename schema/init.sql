@@ -192,6 +192,16 @@ CREATE TABLE notifications (
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Create medical_requests table
+CREATE TABLE medical_requests (
+    id SERIAL PRIMARY KEY,
+    student_id INTEGER NOT NULL REFERENCES students(id),
+    notes TEXT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
 -- Insert default roles
 INSERT INTO roles (name) VALUES
 ('parent'),
@@ -380,3 +390,8 @@ INSERT INTO hashtags (tag) VALUES
 INSERT INTO school_admins (user_id, school_id) VALUES
 (4, 1),
 (5, 2);
+
+INSERT INTO medical_requests (student_id, notes) VALUES
+(1, 'Student has a fever and needs to rest for 2 days.'),
+(2, 'Student requires medication for allergies.'),
+(3, 'Student needs to see a dentist for a toothache.');
