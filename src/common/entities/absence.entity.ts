@@ -1,14 +1,14 @@
-import { Entity, ManyToOne, PrimaryColumn, JoinColumn, Column } from 'typeorm';
+import { Entity, ManyToOne, PrimaryColumn, JoinColumn, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { Student } from './student.entity';
 import { Class } from './class.entity';
 import { DailySchedule } from './daily-schedule.entity';
 
 @Entity('absence')
 export class Absence {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   student_id: number;
 
-  @PrimaryColumn()
+  @Column()
   class_id: number;
 
 

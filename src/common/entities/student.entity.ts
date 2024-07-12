@@ -44,6 +44,7 @@ export class Student {
 
   @OneToMany(() => MedicalRequest, medicalRequest => medicalRequest.student)
   medicalRequests: MedicalRequest[];
+  
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 

@@ -13,7 +13,6 @@ import { ClassScheduleModule } from './api/class_schedule/class_schedule.module'
 import { EatingScheduleModule } from './api/eating_schedule/eating_schedule.module';
 import { AbsenceModule } from './api/absence/absence.module';
 import { AbsenceService } from './api/absence/absence.service';
-import { MedicalRequestModule } from './medical-request/medical-request.module';
 import { MedicalRequestModule } from './api/medical-request/medical-request.module';
 
 @Module({
