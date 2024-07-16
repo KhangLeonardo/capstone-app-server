@@ -395,3 +395,4 @@ INSERT INTO medical_requests (student_id, notes) VALUES
 (1, 'Student has a fever and needs to rest for 2 days.'),
 (2, 'Student requires medication for allergies.'),
 (3, 'Student needs to see a dentist for a toothache.');
+    

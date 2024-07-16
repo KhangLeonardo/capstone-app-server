@@ -21,27 +21,27 @@ export class MedicalRequestService {
           .where('student.parent_id = :parentId', { parentId })
           .getMany();
       }
-    // async create(parentId: number,createMedicalRequestDto: CreateMedicalRequestDto): Promise<MedicalRequest> {
-    //     const student = await this.studentRepository
-    //     .createQueryBuilder('student')
-    //     .where('student.id = :studentId', { studentId: createMedicalRequestDto.studentId })
-    //     .andWhere('student.parentId = :parentId', { parentId })
-    //     .getOne();
+    async create(parentId: number,createMedicalRequestDto: CreateMedicalRequestDto): Promise<MedicalRequest> {
+        const student = await this.studentRepository
+        .createQueryBuilder('student')
+        .where('student.name = :student_name', { student_name: createMedicalRequestDto.student_name })
+        .andWhere('student.parent_id = :parentId', { parentId })
+        .getOne();
 
-    //     if (!student) {
-    //         throw new NotFoundException('Không tìm thấy học sinh')
-    //     }
-    //     const existingRequest = await this.medicalRequestRepository.findOne9{
-    //         where: {
-    //             student: student
-    //         }
-    //     }
-    //     if (existingRequest) {
-    //         throw new ConflictException('Đã tồn tại yêu cầu y tế cho học sinh này');
-    //     }
-    //     const medicalRequest = new MedicalRequest();
-    //     medicalRequest.student = student;
-    //     medicalRequest.notes = createMedicalRequestDto.notes;
-    //     return this.medicalRequestRepository.save(medicalRequest);
-    // }
+        if (!student) {
+            throw new NotFoundException('Không tìm thấy học sinh')
+        }
+        const existingRequest = await this.medicalRequestRepository.findOne({
+            where: {
+                student: student
+            }
+        });
+        if (existingRequest) {
+            throw new ConflictException('Đã tồn tại yêu cầu y tế cho học sinh này');
+        }
+        const medicalRequest = new MedicalRequest();
+        medicalRequest.student = student;
+        medicalRequest.notes = createMedicalRequestDto.notes;
+        return this.medicalRequestRepository.save(medicalRequest);
+    }
 }
