@@ -217,6 +217,16 @@ CREATE TABLE notifications (
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Create medical_requests table
+CREATE TABLE medical_requests (
+    id SERIAL PRIMARY KEY,
+    student_id INTEGER NOT NULL REFERENCES students(id),
+    notes TEXT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
 -- Insert default roles
 INSERT INTO roles (name) VALUES
 ('parent'),
@@ -404,6 +414,13 @@ INSERT INTO school_admins (user_id, school_id) VALUES
 (4, 1),
 (5, 2);
 
+
+INSERT INTO medical_requests (student_id, notes) VALUES
+(1, 'Student has a fever and needs to rest for 2 days.'),
+(2, 'Student requires medication for allergies.'),
+(3, 'Student needs to see a dentist for a toothache.');
+    
+
 INSERT INTO main_images (url) VALUES
 ('https://static.independent.co.uk/s3fs-public/thumbnails/image/2017/01/20/18/anya-taylor-joy.jpg'),
 ('https://media.glamourmagazine.co.uk/photos/643ea5db549a207868379869/master/w_1600%2Cc_limit/ANYA%2520TAYLOR%2520JOY%2520180423%2520GettyImages-1441299394.jpg'),
@@ -441,3 +458,4 @@ INSERT INTO student_images (student_id, image_id) VALUES
 (3, 7),
 (3, 8),
 (3, 9);
+
