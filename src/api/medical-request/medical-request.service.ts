@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, HttpException, HttpStatus, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MedicalRequest } from 'src/common/entities/medical-request.entity';
 import { Student } from 'src/common/entities/student.entity';
@@ -43,7 +43,12 @@ export class MedicalRequestService {
         const medicalRequest = new MedicalRequest();
         medicalRequest.student = student;
         medicalRequest.notes = createMedicalRequestDto.notes;
-        return this.medicalRequestRepository.save(medicalRequest);
+        const savedRequest =  await this.medicalRequestRepository.save(medicalRequest);
+        throw new HttpException({
+            status: HttpStatus.CREATED,
+            message: 'Tạo yêu cầu y té thành công',
+            data: savedRequest,
+        }, HttpStatus.CREATED);
     }
     async update(parentId: number, id: number, updateMedicalRequestDto: UpdateMedicalRequestDto): Promise<MedicalRequest> {
         const medicalRequest = await this.medicalRequestRepository.findOne({
@@ -58,7 +63,12 @@ export class MedicalRequestService {
         }
 
         medicalRequest.notes = updateMedicalRequestDto.notes;
-        return this.medicalRequestRepository.save(medicalRequest);
+        const updatedRequest =  await this.medicalRequestRepository.save(medicalRequest);
+        throw new HttpException({
+            status: HttpStatus.OK,
+            message: 'Cập nhật yêu cầu y tế thành công',
+            data: updatedRequest,
+          }, HttpStatus.OK);
     }
     
     async remove(parentId: number, id: number): Promise<void> {
@@ -73,5 +83,9 @@ export class MedicalRequestService {
             throw new UnauthorizedException('Bạn không có quyền xoá yêu cầu y tế này');
         }
         await this.medicalRequestRepository.remove(medicalRequest);
+        throw new HttpException({
+            status: HttpStatus.OK,
+            message: 'Xoá yêu cầu y tế thành công',
+        }, HttpStatus.OK);
     }
 }
