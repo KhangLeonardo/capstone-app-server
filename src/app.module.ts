@@ -14,6 +14,8 @@ import { EatingScheduleModule } from './api/eating_schedule/eating_schedule.modu
 import { AbsenceModule } from './api/absence/absence.module';
 import { AbsenceService } from './api/absence/absence.service';
 import { MedicalRequestModule } from './api/medical-request/medical-request.module';
+import { ImageModule } from './api/image/image.module';
+
 
 @Module({
   imports: [
@@ -36,6 +38,7 @@ import { MedicalRequestModule } from './api/medical-request/medical-request.modu
     EatingScheduleModule,
     AbsenceModule,
     MedicalRequestModule,
+    ImageModule,
   ],
   controllers: [],
 })
