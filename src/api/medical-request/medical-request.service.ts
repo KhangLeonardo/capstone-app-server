@@ -1,9 +1,10 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MedicalRequest } from 'src/common/entities/medical-request.entity';
 import { Student } from 'src/common/entities/student.entity';
 import { Repository } from 'typeorm';
 import { CreateMedicalRequestDto } from './dto/create-medical-request.dto';
+import { UpdateMedicalRequestDto } from './dto/update-medical-request.dto';
 
 @Injectable()
 export class MedicalRequestService {
@@ -43,5 +44,34 @@ export class MedicalRequestService {
         medicalRequest.student = student;
         medicalRequest.notes = createMedicalRequestDto.notes;
         return this.medicalRequestRepository.save(medicalRequest);
+    }
+    async update(parentId: number, id: number, updateMedicalRequestDto: UpdateMedicalRequestDto): Promise<MedicalRequest> {
+        const medicalRequest = await this.medicalRequestRepository.findOne({
+            where: { id },
+            relations: ['student'],
+          });
+        if (!medicalRequest) {
+            throw new NotFoundException("Yêu cầu y tế không được tìm thấy");
+        }
+        if (medicalRequest.student.parent_id !== parentId) {
+            throw new UnauthorizedException('Bạn không có quyền cập nhật yêu cầu y tế này');
+        }
+
+        medicalRequest.notes = updateMedicalRequestDto.notes;
+        return this.medicalRequestRepository.save(medicalRequest);
+    }
+    
+    async remove(parentId: number, id: number): Promise<void> {
+        const medicalRequest = await this.medicalRequestRepository.findOne({
+            where: { id },
+            relations: ['student'],
+          });
+        if (!medicalRequest) {
+            throw new NotFoundException("Yêu cầu y tế không được tìm thấy");
+        }
+        if (medicalRequest.student.parent_id !== parentId) {
+            throw new UnauthorizedException('Bạn không có quyền xoá yêu cầu y tế này');
+        }
+        await this.medicalRequestRepository.remove(medicalRequest);
     }
 }
