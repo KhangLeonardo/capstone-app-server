@@ -15,10 +15,23 @@ import { AuthGuard } from '@nestjs/passport';
 import { FilesInterceptor } from '@nestjs/platform-express/multer';
 
 import { PostService } from './post.service';
+import { RolesGuard } from 'src/common/guards/roles.guard';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { CreatePostDto } from './dto/create-post.dto';
+
 
 @Controller('post')
 export class PostController {
   constructor(private readonly postService: PostService) {}
+
+  @Post()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(2)
+  @UseInterceptors(FilesInterceptor('images'))
+  async create(@Req() request: any, @Body() createPostDto: CreatePostDto, @UploadedFiles() files: Express.Multer.File[]) {
+    const {id: userId}= request.user;
+    return this.postService.create(userId, createPostDto, files);
+  }
 
   @Get()
   @UseGuards(AuthGuard('jwt'))

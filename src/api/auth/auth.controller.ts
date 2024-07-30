@@ -19,10 +19,19 @@ import { CreateDeviceTokenDto } from './dto/create-device-token.dto';
 
 import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
+import { CreateAdminAuthDto } from './dto/create-admin-auth.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+  @Throttle({default: {limit: 3, ttl: 60000}})
+  @Post('admin/login')
+  async loginAdmin(@Body() createAdminAuthDto: CreateAdminAuthDto, @Res() response: Response) {
+    const result = await this.authService.loginAdmin(createAdminAuthDto);
+    this.setAuthorizationHeader(response, result.accessToken);
+    delete result.accessToken;
+    response.status(HttpStatus.OK).json(result);
+  }
 
   @Throttle({ default: { limit: 3, ttl: 60000 } })
   @Post('login')
