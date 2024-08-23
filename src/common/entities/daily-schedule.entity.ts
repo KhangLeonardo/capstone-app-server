@@ -6,12 +6,13 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
-  OneToMany,
 } from 'typeorm';
 import { Class } from './class.entity';
-import { Absence } from './absence.entity';
+import { Teacher } from './teacher.entity';
+import { Subject } from './subject.entity';
+import { Location } from './location.entity';
 
-@Entity('daily_schedules')
+@Entity({ name: 'daily_schedules' })
 export class DailySchedule {
   @PrimaryGeneratedColumn()
   id: number;
@@ -19,9 +20,26 @@ export class DailySchedule {
   @Column({ nullable: false })
   class_id: number;
 
-  @ManyToOne(() => Class, (classEntity) => classEntity.dailySchedules)
+  @Column({ nullable: false })
+  teacher_id: number;
+
+  @Column({ nullable: false })
+  subject_id: number;
+
+  @Column({ nullable: false })
+  location_id: number;
+
+  @ManyToOne(() => Class, (classEntity) => classEntity.daily_schedules, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'class_id' })
-  classEntity: Class;
+  class: Class;
+
+  @ManyToOne(() => Location, (location) => location.daily_schedules, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'location_id' })
+  location: Location;
 
   @Column({ type: 'timestamptz', nullable: false })
   start_time: Date;
@@ -29,13 +47,21 @@ export class DailySchedule {
   @Column({ type: 'timestamptz', nullable: false })
   end_time: Date;
 
-  @Column({ nullable: false })
-  subject: string;
+  @ManyToOne(() => Teacher, (teacher) => teacher.daily_schedules, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'teacher_id' })
+  teacher: Teacher;
 
+  @ManyToOne(() => Subject, (subject) => subject.daily_schedules, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'subject_id' })
+  subject: Subject;
 
-  @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn({ type: 'timestamptz' })
   created_at: Date;
 
-  @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  @UpdateDateColumn({ type: 'timestamptz' })
   updated_at: Date;
 }
