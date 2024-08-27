@@ -6,18 +6,43 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-import { Post } from './post.entity';
+import { Class } from './class.entity';
 import { Student } from './student.entity';
 import { Teacher } from './teacher.entity';
-import { Class } from './class.entity';
+import { Post } from './post.entity';
+import { Media } from './media.entity';
+import { SchoolAdmin } from './school-admin.entity';
+import { Location } from './location.entity';
+import { Notification } from './notification.entity';
 
-@Entity('schools')
+@Entity({ name: 'schools' })
 export class School {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 255, nullable: false })
+  @Column({ type: 'varchar', length: 255 })
   name: string;
+
+  @Column({ type: 'varchar', length: 255, nullable: false })
+  address: string;
+
+  @Column({ type: 'varchar', length: 20, nullable: false })
+  contact_number: string;
+
+  @Column({ type: 'varchar', length: 255, nullable: false })
+  email: string;
+
+  @CreateDateColumn({ type: 'timestamptz' })
+  created_at: Date;
+
+  @UpdateDateColumn({ type: 'timestamptz' })
+  updated_at: Date;
+
+  @OneToMany(() => Class, (classEntity) => classEntity.school)
+  classes: Class[];
+
+  @OneToMany(() => Location, (location) => location.school)
+  locations: Location[];
 
   @OneToMany(() => Student, (student) => student.school)
   students: Student[];
@@ -25,15 +50,15 @@ export class School {
   @OneToMany(() => Teacher, (teacher) => teacher.school)
   teachers: Teacher[];
 
-  @OneToMany(() => Class, (classEntity) => classEntity.school)
-  classes: Class[];
-
   @OneToMany(() => Post, (post) => post.school)
   posts: Post[];
 
-  @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
-  created_at: Date;
+  @OneToMany(() => Media, (media) => media.school)
+  media: Media[];
 
-  @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
-  updated_at: Date;
+  @OneToMany(() => SchoolAdmin, (schoolAdmin) => schoolAdmin.school)
+  school_admins: SchoolAdmin[];
+
+  @OneToMany(() => Notification, (notification) => notification.school)
+  notifications: Notification[];
 }
