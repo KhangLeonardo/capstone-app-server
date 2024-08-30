@@ -74,8 +74,10 @@ export class PostService {
     const post = await this.postRepository
       .createQueryBuilder('post')
       .innerJoinAndSelect('post.school', 'school')
-      .leftJoinAndSelect('post.likes', 'like')
+      .leftJoinAndSelect('post.toggle_likes', 'toggleLikes')
       .leftJoinAndSelect('post.comments', 'comment')
+      .leftJoinAndSelect('post.post_media','postMedia')
+      .leftJoinAndSelect('postMedia.media', 'media')
       .where('post.id = :postId', { postId })
       .andWhere('school.id IN (:...schoolIds)', { schoolIds })
       .getOne();
@@ -150,8 +152,7 @@ export class PostService {
     const likers = post.toggle_likes?.map((like) => like.user_id.toString()) ?? [];
   
     const mediaUrls = post.post_media?.map((postMedia) => {
-      const folderName = `schools/${post.school_id}/posts/${post.id}/media/`;
-      return `${folderName}${postMedia.media.url}`;
+      return postMedia.media.url;
     }) ?? [];
   
     return {
