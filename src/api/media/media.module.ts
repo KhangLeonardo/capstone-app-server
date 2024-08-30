@@ -1,22 +1,22 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ImageService } from './image.service';
-import { ImageController } from './image.controller';
+import { MediaService } from './media.service';
+import { MediaController } from './media.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from '../../common/guards/jwt.strategy';
 import { AuthService } from '../auth/auth.service';
 
-import { StudentImage } from '../../common/entities/student-image.entity';
+import { StudentMedia } from '../../common/entities/student-media.entity';
 import { Student } from '../../common/entities/student.entity';
-import { MainImage } from '../../common/entities/media.entity';
+import { Media } from '../../common/entities/media.entity';
 import { User } from '../../common/entities/user.entity';
 import { Role } from '../../common/entities/role.entity';
 import { UserSession } from '../../common/entities/user-session.entity';
 import { DeviceToken } from '../../common/entities/device-token.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([StudentImage, MainImage, User, Role, UserSession, DeviceToken, Student]),
+  imports: [TypeOrmModule.forFeature([StudentMedia, Media, User, Role, UserSession, DeviceToken, Student]),
   JwtModule.registerAsync({
     imports: [ConfigModule],
     inject: [ConfigService],
@@ -28,7 +28,7 @@ import { DeviceToken } from '../../common/entities/device-token.entity';
     }),
   }),
   ],
-  controllers: [ImageController],
-  providers: [ImageService, JwtStrategy, AuthService],
+  controllers: [MediaController],
+  providers: [MediaService, JwtStrategy, AuthService],
 })
-export class ImageModule { }
+export class MediaModule { }

@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { AbsenceService } from './absence.service';
-import { AbsenceController } from './absence.controller';
+import { RequestService } from './request.service';
+import { RequestController } from './request.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Absence } from 'src/common/entities/absence.entity';
+import { Request } from 'src/common/entities/request.entity';
 import { User } from 'src/decorator/customize';
 import { Role } from 'src/common/entities/role.entity';
 import { UserSession } from 'src/common/entities/user-session.entity';
@@ -17,7 +17,7 @@ import { ClassStudent } from 'src/common/entities/class-student.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([
-    Absence,
+    Request,
     User, 
     Role,
     UserSession,
@@ -38,7 +38,7 @@ import { ClassStudent } from 'src/common/entities/class-student.entity';
   ConfigModule,
   AuthModule
 ],
-  providers: [AbsenceService],
-  controllers: [AbsenceController]
+  providers: [RequestService],
+  controllers: [RequestController]
 })
-export class AbsenceModule {}
+export class RequestModule {}

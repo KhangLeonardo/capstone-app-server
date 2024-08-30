@@ -6,14 +6,13 @@ import { PostgresModule } from './providers/database/postgres/postgres.module';
 import { RedisModule } from './providers/cache/redis/redis.module';
 import { UserModule } from './api/user/user.module';
 import { AuthModule } from './api/auth/auth.module';
-import { PostModule } from './api/post/post.module';
+// import { PostModule } from './api/post/post.module';
 import { NotificationModule } from './api/notification/notification.module';
 // import { SeedingsModule } from './migrations/seedings/seedings.module';
 import { ClassScheduleModule } from './api/class_schedule/class_schedule.module';
 import { EatingScheduleModule } from './api/eating_schedule/eating_schedule.module';
-import { AbsenceModule } from './api/absence/absence.module';
-import { AbsenceService } from './api/absence/absence.service';
-import { ImageModule } from './api/image/image.module';
+import { RequestModule } from './api/request/request.module';
+import { MediaModule } from './api/media/media.module';
 
 @Module({
   imports: [
@@ -29,13 +28,13 @@ import { ImageModule } from './api/image/image.module';
     UserModule,
     AuthModule,
     RedisModule,
-    PostModule,
+    // PostModule,
     NotificationModule,
     // SeedingsModule,
     ClassScheduleModule,
     EatingScheduleModule,
-    AbsenceModule,
-    ImageModule,
+    RequestModule,
+    MediaModule,
   ],
   controllers: [],
 })
