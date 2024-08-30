@@ -9,7 +9,7 @@ import { AuthService } from '../auth/auth.service';
 
 import { StudentImage } from '../../common/entities/student-image.entity';
 import { Student } from '../../common/entities/student.entity';
-import { MainImage } from '../../common/entities/main-image.entity';
+import { MainImage } from '../../common/entities/media.entity';
 import { User } from '../../common/entities/user.entity';
 import { Role } from '../../common/entities/role.entity';
 import { UserSession } from '../../common/entities/user-session.entity';
@@ -17,18 +17,18 @@ import { DeviceToken } from '../../common/entities/device-token.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([StudentImage, MainImage, User, Role, UserSession, DeviceToken, Student]),
-      JwtModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
-        signOptions: {
-          expiresIn: configService.get<string>('JWT_EXPIRATION_TIME'),
-        },
-      }),
+  JwtModule.registerAsync({
+    imports: [ConfigModule],
+    inject: [ConfigService],
+    useFactory: (configService: ConfigService) => ({
+      secret: configService.get<string>('JWT_SECRET'),
+      signOptions: {
+        expiresIn: configService.get<string>('JWT_EXPIRATION_TIME'),
+      },
     }),
-],
+  }),
+  ],
   controllers: [ImageController],
   providers: [ImageService, JwtStrategy, AuthService],
 })
-export class ImageModule {}
+export class ImageModule { }
