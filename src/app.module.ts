@@ -12,7 +12,7 @@ import { NotificationModule } from './api/notification/notification.module';
 import { ClassScheduleModule } from './api/class_schedule/class_schedule.module';
 import { EatingScheduleModule } from './api/eating_schedule/eating_schedule.module';
 import { RequestModule } from './api/request/request.module';
-// import { ImageModule } from './api/image/image.module';
+import { MediaModule } from './api/media/media.module';
 
 @Module({
   imports: [
@@ -34,7 +34,7 @@ import { RequestModule } from './api/request/request.module';
     ClassScheduleModule,
     EatingScheduleModule,
     RequestModule,
-    // ImageModule,
+    MediaModule,
   ],
   controllers: [],
 })
