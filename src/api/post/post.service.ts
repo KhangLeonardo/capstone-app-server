@@ -18,12 +18,15 @@ import { v4 as uuidv4 } from 'uuid';
 import { Post } from '../../common/entities/post.entity';
 import { ToggleLike } from '../../common/entities/toggle-like.entity';
 import { Comment } from '../../common/entities/comment.entity';
-import { Image } from '../../common/entities/image.entity';
+
 
 import { AuthService } from '../../api/auth/auth.service';
+import { Media } from 'src/common/entities/media.entity';
+import { PostMedia } from 'src/common/entities/post-media.entity';
 
 @Injectable()
 export class PostService {
+  private s3Client: S3Client;
   constructor(
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
@@ -33,9 +36,21 @@ export class PostService {
     @InjectRepository(Comment)
     private readonly commentRepository: Repository<Comment>,
     private readonly configService: ConfigService,
-    @InjectRepository(Image)
-    private readonly imageRepository: Repository<Image>,
-  ) {}
+    @InjectRepository(Media)
+    private readonly mediaRepository: Repository<Media>,
+    @InjectRepository(PostMedia)
+    private readonly postMediaRepository: Repository<PostMedia>
+    ) {
+      const region = this.configService.get<string>('AWS_REGION');
+      const accessKeyId = this.configService.get<string>('AWS_ACCESS_KEY_ID');
+      const secretAccessKey = this.configService.get<string>(
+        'AWS_SECRET_ACCESS_KEY',
+    );
+    this.s3Client = new S3Client({
+      region,
+      credentials: {accessKeyId, secretAccessKey}
+    });
+    }
 
   private async getUserSchoolIds(userId: number): Promise<number[]> {
     const user = await this.authService.getProfile(userId);
@@ -91,43 +106,47 @@ export class PostService {
     const folderName = `schools/${post.school_id}/posts/${post.id}/images/`;
 
     const uploadPromises: Promise<any>[] = [];
-    const imageEntities: Image[] = [];
+    const mediaEntities: Media[] = [];
 
     for (const file of files) {
-      const fileName = uuidv4() + extname(file.originalname);
+      const fileName = `${uuidv4()}${extname(file.originalname)}`;
       const uploadParams: PutObjectCommandInput = {
         Bucket: bucketName,
-        Key: folderName + fileName,
+        Key: `${folderName}${fileName}`,
         Body: file.buffer,
         ACL: 'private',
       };
       uploadPromises.push(s3.send(new PutObjectCommand(uploadParams)));
 
-      const imageUrl = `${fileName}`;
-      const image = new Image();
-      image.url = imageUrl;
-      image.post = post;
-      imageEntities.push(image);
+      const media = new Media();
+      media.url = fileName;
+      media.media_type = file.mimetype,
+      media.school_id = post.school_id;
+      mediaEntities.push(media);
     }
 
     await Promise.all(uploadPromises);
+    const savedMedia = await this.mediaRepository.save(mediaEntities);
 
-    await this.imageRepository.save(imageEntities);
+    const postMediaEntities = savedMedia.map((media) => {
+      const postMedia = new PostMedia();
+      postMedia.post = post;
+      postMedia.media = media;
+      return postMedia;
+    })
   }
 
   private async mapPostWithImages(post: Post): Promise<any> {
     if (!post) return null;
 
-    const numLikes = post.likes?.length ?? 0;
+    const numLikes = post.toggle_likes.length ?? 0;
     const numComments = post.comments?.length ?? 0;
-    const likers = post.likes?.map((like) => like.user_id.toString()) ?? [];
+    const likers = post.toggle_likes?.map((like) => like.user_id.toString()) ?? [];
 
-    const images = await this.imageRepository.find({
-      where: { post_id: post.id },
-    });
-
-    const folderName = `schools/${post.school_id}/posts/${post.id}/images/`;
-    const imageUrls = images.map((image) => `${folderName}${image.url}`);
+    const mediaUrls = post.post_media?.map((postMedia) => {
+      const folderName = `schools/${post.school_id}/posts/${post.id}/media/`;
+      return `${folderName}${postMedia.media.url}`;
+    })
 
     return {
       id: post.id,
@@ -143,20 +162,22 @@ export class PostService {
       numLikes,
       numComments,
       likers,
-      images: imageUrls,
+      media: mediaUrls,
     };
   }
 
   async findAll(userId: number): Promise<any[]> {
     const schoolIds = await this.getUserSchoolIds(userId);
     const posts = await this.postRepository
-      .createQueryBuilder('post')
-      .innerJoinAndSelect('post.school', 'school')
-      .leftJoinAndSelect('post.likes', 'like')
-      .leftJoinAndSelect('post.comments', 'comment')
-      .where('school.id IN (:...schoolIds)', { schoolIds })
-      .andWhere('post.status = :status', { status: 'published' })
-      .getMany();
+    .createQueryBuilder('post')
+    .innerJoinAndSelect('post.school', 'school')
+    .leftJoinAndSelect('post.toggle_likes', 'toggleLike')
+    .leftJoinAndSelect('post.comments', 'comment')
+    .leftJoinAndSelect('post.post_media', 'postMedia')
+    .leftJoinAndSelect('postMedia.media', 'media')
+    .where('school.id IN (:...schoolIds)', { schoolIds })
+    .andWhere('post.status = :status', { status: 'published' })
+    .getMany();
 
     return Promise.all(posts.map((post) => this.mapPostWithImages(post)));
   }
