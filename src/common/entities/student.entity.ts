@@ -13,7 +13,7 @@ import { User } from './user.entity';
 import { ClassStudent } from './class-student.entity';
 import { Request } from './request.entity';
 import { StudentMedia } from './student-media.entity';
-import { Gender } from '../enums/gender.enum';
+import { Gender } from '../enum/gender.enum';
 
 @Entity({ name: 'students' })
 export class Student {
