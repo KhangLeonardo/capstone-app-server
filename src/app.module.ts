@@ -13,6 +13,7 @@ import { ClassScheduleModule } from './api/class_schedule/class_schedule.module'
 import { EatingScheduleModule } from './api/eating_schedule/eating_schedule.module';
 import { RequestModule } from './api/request/request.module';
 import { MediaModule } from './api/media/media.module';
+import { PostModule } from './api/post/post.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { MediaModule } from './api/media/media.module';
     EatingScheduleModule,
     RequestModule,
     MediaModule,
+    PostModule
   ],
   controllers: [],
 })

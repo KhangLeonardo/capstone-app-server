@@ -10,6 +10,7 @@ import {
   Put,
   UploadedFiles,
   UseInterceptors,
+  Query,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FilesInterceptor } from '@nestjs/platform-express/multer';
@@ -22,9 +23,15 @@ export class PostController {
 
   @Get()
   @UseGuards(AuthGuard('jwt'))
-  async findAll(@Req() request: any) {
+  async findAll(
+    @Req() request: any,
+    @Query('page') page: number = 1,
+    @Query('size') size: number = 10
+  ) {
     const { id } = request.user;
-    return this.postService.findAll(id);
+    const pageNum = Number(page);
+    const sizeNum = Number(size);
+    return this.postService.findAll(id, pageNum, sizeNum);
   }
 
   @Get(':id')

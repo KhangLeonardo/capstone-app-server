@@ -23,6 +23,12 @@ import { Comment } from '../../common/entities/comment.entity';
 import { AuthService } from '../../api/auth/auth.service';
 import { Media } from 'src/common/entities/media.entity';
 import { PostMedia } from 'src/common/entities/post-media.entity';
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  size: number;
+}
 
 @Injectable()
 export class PostService {
@@ -138,16 +144,16 @@ export class PostService {
 
   private async mapPostWithImages(post: Post): Promise<any> {
     if (!post) return null;
-
-    const numLikes = post.toggle_likes.length ?? 0;
+  
+    const numLikes = post.toggle_likes?.length ?? 0;
     const numComments = post.comments?.length ?? 0;
     const likers = post.toggle_likes?.map((like) => like.user_id.toString()) ?? [];
-
+  
     const mediaUrls = post.post_media?.map((postMedia) => {
       const folderName = `schools/${post.school_id}/posts/${post.id}/media/`;
       return `${folderName}${postMedia.media.url}`;
-    })
-
+    }) ?? [];
+  
     return {
       id: post.id,
       title: post.title,
@@ -165,22 +171,35 @@ export class PostService {
       media: mediaUrls,
     };
   }
+  
+  
 
-  async findAll(userId: number): Promise<any[]> {
+  async findAll(userId: number, page: number, size: number): Promise<PaginatedResponse<Post>> {
     const schoolIds = await this.getUserSchoolIds(userId);
-    const posts = await this.postRepository
-    .createQueryBuilder('post')
-    .innerJoinAndSelect('post.school', 'school')
-    .leftJoinAndSelect('post.toggle_likes', 'toggleLike')
-    .leftJoinAndSelect('post.comments', 'comment')
-    .leftJoinAndSelect('post.post_media', 'postMedia')
-    .leftJoinAndSelect('postMedia.media', 'media')
-    .where('school.id IN (:...schoolIds)', { schoolIds })
-    .andWhere('post.status = :status', { status: 'published' })
-    .getMany();
-
-    return Promise.all(posts.map((post) => this.mapPostWithImages(post)));
+    const skip = (page - 1) * size;
+    const [posts, total] = await this.postRepository
+      .createQueryBuilder('post')
+      .innerJoinAndSelect('post.school', 'school')
+      .leftJoinAndSelect('post.toggle_likes', 'toggleLike')
+      .leftJoinAndSelect('post.comments', 'comment')
+      .leftJoinAndSelect('post.post_media', 'postMedia')
+      .leftJoinAndSelect('postMedia.media', 'media')
+      .where('school.id IN (:...schoolIds)', { schoolIds })
+      .andWhere('post.status = :status', { status: 'published' })
+      .skip(skip)
+      .take(size)
+      .getManyAndCount();
+  
+    const mappedPosts = await Promise.all(posts.map((post) => this.mapPostWithImages(post)));
+  
+    return {
+      data: mappedPosts || [], 
+      total: total || 0,
+      page,
+      size
+    };
   }
+  
 
   async findOne(userId: number, id: number): Promise<any> {
     const post = await this.findPostByIdAndCheckSchool(userId, id);
