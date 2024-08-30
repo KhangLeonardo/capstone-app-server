@@ -1,17 +1,17 @@
 import { Type } from "class-transformer";
 import { IsDate, IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
-import { AbsenceStatus } from "src/common/enum/absence_status.enum";
-import { AbsenceType } from "src/common/enum/absence_type.enum";
+import { RequestStatus } from "src/common/enum/request_status.enum";
+import { RequestType } from "src/common/enum/request_type.enum";
 import { IsTodayOrFutureDate } from "src/common/decorators/is-today-or-future-date.decorator";
 
-export class CreateAbsenceDto {
+export class CreateRequestDto {
     @IsOptional()
-    @IsEnum(AbsenceStatus)
-    absence_status: string; 
+    @IsEnum(RequestStatus)
+    request_status: string; 
 
     @IsNotEmpty()
-    @IsEnum(AbsenceType)
-    absence_type: string; 
+    @IsEnum(RequestType)
+    request_type: string; 
 
     @IsNotEmpty()
     @IsString()
