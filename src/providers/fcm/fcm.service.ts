@@ -9,7 +9,6 @@ export class FcmService {
   private readonly messaging: admin.messaging.Messaging;
 
   constructor() {
-    console.log('FIREBASE_PRIVATE_KEY:', process.env.FIREBASE_PRIVATE_KEY);
     const firebaseConfig = {
       credential: admin.credential.cert({
         projectId: process.env.FIREBASE_PROJECT_ID,
