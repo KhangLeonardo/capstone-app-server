@@ -29,7 +29,14 @@ export interface PaginatedResponse<T> {
   page: number;
   size: number;
 }
-
+export class MediaRespone {
+  url: string;
+  type: string;
+  constructor(url: string, type:string) {
+    this.url = url;
+    this.type = type;
+  }
+}
 @Injectable()
 export class PostService {
   private s3Client: S3Client;
@@ -151,8 +158,10 @@ export class PostService {
     const numComments = post.comments?.length ?? 0;
     const likers = post.toggle_likes?.map((like) => like.user_id.toString()) ?? [];
   
-    const mediaUrls = post.post_media?.map((postMedia) => {
-      return postMedia.media.url;
+    const media = post.post_media?.map((postMedia) => {
+      const url = postMedia.media.url;
+      const type  = this.getFileType(url);
+      return {url, type};
     }) ?? [];
   
     return {
@@ -169,7 +178,7 @@ export class PostService {
       numLikes,
       numComments,
       likers,
-      media: mediaUrls,
+      media
     };
   }
   
@@ -199,6 +208,16 @@ export class PostService {
       page,
       size
     };
+  }
+
+  private getFileType(url: string): string {
+    if (url.endsWith('.jpg') || url.endsWith('.png') || url.endsWith('.jpeg')) {
+      return 'image';
+    } else if (url.endsWith('.mp4') || url.endsWith('.avi')) {
+      return 'video';
+    } else {
+      return 'unknown'
+    }
   }
   
 
