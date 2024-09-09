@@ -30,9 +30,11 @@ export interface PaginatedResponse<T> {
   size: number;
 }
 export class MediaRespone {
+  id: number;
   url: string;
   type: string;
-  constructor(url: string, type:string) {
+  constructor(id: number,url: string, type:string) {
+    this.id = id;
     this.url = url;
     this.type = type;
   }
@@ -159,9 +161,10 @@ export class PostService {
     const likers = post.toggle_likes?.map((like) => like.user_id.toString()) ?? [];
   
     const media = post.post_media?.map((postMedia) => {
+      const mediId = postMedia.media.id;
       const url = postMedia.media.url;
       const type  = this.getFileType(url);
-      return {url, type};
+      return {id: mediId,url, type};
     }) ?? [];
   
     return {
