@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Req, UseGuards, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, Req, UseGuards, Get, Param, Query } from '@nestjs/common';
 import { ClassScheduleService } from './class_schedule.service';
 import { CreateClassScheduleDto } from './dto/create-class_schedule.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -15,27 +15,22 @@ export class ClassScheduleController {
     return this.classScheduleService.findStudentByUser(userId);
   }
 
-  @Post('student/:studentId')
   @UseGuards(AuthGuard('jwt'))
-  async findScheduleByStudent(
+  @Post(':studentId')
+  async getSchedules(
     @Req() request: any,
     @Param('studentId') studentId: number,
-    @Body() body: CreateClassScheduleDto
+    @Body('startDate') startDate: string,
+    @Body('endDate') endDate: string
   ) {
     const {id: userId} = request.user;
-    const {startDate, endDate} = body;
-    return this.classScheduleService.findScheduleByStudent(
-      userId,
+    console.log('Parameters:', studentId, startDate, endDate);
+
+    return this.classScheduleService.findScheduleById(
       studentId,
       startDate,
       endDate
     )
-  }
-
-  @Get(':scheduleId')
-  @UseGuards(AuthGuard('jwt'))
-  async getScheduleDetail(@Param('scheduleId') scheduleId: number) {
-    return this.classScheduleService.findScheduleById(scheduleId);
   }
 
 }

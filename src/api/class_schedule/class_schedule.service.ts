@@ -26,72 +26,79 @@ export class ClassScheduleService {
       .getMany();
   }
 
-  async findScheduleByStudent(
-    userId: number,
+  // async findScheduleByStudent(
+  //   userId: number,
+  //   studentId: number,
+  //   startDate: string,
+  //   endDate: string
+  // ): Promise<DailySchedule[]> {
+  //   return this.dailyScheduleRepository
+  //     .createQueryBuilder('schedule')
+  //     .innerJoin(
+  //       ClassStudent,
+  //       'classStudent',
+  //       'classStudent.class_id = schedule.class_id',
+  //     )
+  //     .innerJoin(Student, 'student','student.id = classStudent.student_id')
+  //     .where('student.parent_id = :userId', { userId })
+  //     .andWhere('student.id = :studentId', {studentId})
+  //     .andWhere('schedule.start_time >= :startDate', {startDate})
+  //     .andWhere('schedule.end_time <= :endDate', {endDate})
+  //     .select([
+  //       'schedule.id',
+  //       'schedule.class_id',
+  //       'schedule.start_time',
+  //       'schedule.end_time',
+  //       'schedule.subject'
+  //     ])
+  //     .getMany();
+  // }
+
+  async findScheduleById(
+
     studentId: number,
     startDate: string,
-    endDate: string
-  ): Promise<DailySchedule[]> {
-    return this.dailyScheduleRepository
-      .createQueryBuilder('schedule')
-      .innerJoin(
-        ClassStudent,
-        'classStudent',
-        'classStudent.class_id = schedule.class_id',
-      )
-      .innerJoin(Student, 'student','student.id = classStudent.student_id')
-      .where('student.parent_id = :userId', { userId })
-      .andWhere('student.id = :studentId', {studentId})
-      .andWhere('schedule.start_time >= :startDate', {startDate})
-      .andWhere('schedule.end_time <= :endDate', {endDate})
-      .select([
-        'schedule.id',
-        'schedule.class_id',
-        'schedule.start_time',
-        'schedule.end_time',
-        'schedule.subject'
-      ])
-      .getMany();
-  }
-
-  async findScheduleById(scheduleId: number): Promise<any> {
-    const schedule = await this.dailyScheduleRepository.query(
+    endDate: string,
+  ): Promise<any[]> {
+    const schedules = await this.dailyScheduleRepository.query(
       `
-        SELECT 
-          schedule.id as scheduleId,
-          schedule.class_id as classId,
-          schedule.start_time as startTime,
-          schedule.end_time as endTime,
-          subjects.id AS subjectId,
-          subjects.name AS subjectName,
-          teachers.id as teacherId,
-          teachers.name as teacherName,
-          teachers.contact_number as teacherContactNumber
-        FROM daily_schedules schedule
-        LEFT JOIN classes ON schedule.class_id = classes.id
-        LEFT JOIN subjects ON schedule.subject_id = subjects.id  
-        LEFT JOIN teachers ON classes.teacher_id = teachers.id
-        WHERE schedule.id = $1
+      SELECT 
+      schedule.id ,
+      schedule.class_id ,
+      schedule.start_time ,
+      schedule.end_time,
+      subjects.id AS subject_id,
+      subjects.name AS subject_name,
+      teachers.id as teacher_id,
+      teachers.name as teacher_name,
+      teachers.contact_number as contact_number
+    FROM daily_schedules schedule
+    INNER JOIN classes ON schedule.class_id = classes.id
+    INNER JOIN class_students cs ON cs.class_id = classes.id
+    INNER JOIN students student ON cs.student_id = student.id
+    LEFT JOIN subjects ON schedule.subject_id = subjects.id  
+    LEFT JOIN teachers ON classes.teacher_id = teachers.id
+    WHERE student.id = $1
+    AND schedule.start_time >= $2
+    AND schedule.end_time <= $3
       `, 
-      [scheduleId]
+      [studentId,startDate, endDate]
     );
-
-      if (!schedule || schedule.length === 0) {
+    console.log(schedules);
+      if (!schedules || schedules.length === 0) {
         throw new NotFoundException('Schedule not found');
       }
-      const result = schedule[0];
-      const formattedResult = {
-        scheduleId: result.scheduleid,
-        classId: result.classid,
-        startTime: result.starttime,
-        endTime: result.endtime,
-        subjectId: result.subjectid,
-        subjectName: result.subjectname,
-        teacherId: result.teacherid,
-        teacherName: result.teachername,
-        teacherContactNumber: result.teachercontactnumber
-      };
-      return formattedResult;
+      return schedules.map((result: any) => ({
+        scheduleId: result.schedule_id,
+        classId: result.class_id,
+        startTime: result.start_time,
+        endTime: result.end_time,
+        subjectId: result.subject_id,
+        subjectName: result.subject_name,
+        teacherId: result.teacher_id,
+        teacherName: result.teacher_name,
+        teacherContactNumber: result.contact_number
+      }));
   }
 
 
