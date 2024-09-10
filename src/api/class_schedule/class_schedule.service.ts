@@ -54,27 +54,44 @@ export class ClassScheduleService {
       .getMany();
   }
 
-  async findScheduleById(scheduleId: number): Promise<DailySchedule> {
-    const schedule = await this.dailyScheduleRepository
-      .createQueryBuilder('schedule')
-      .leftJoinAndSelect('schedule.class', 'class')
-      .leftJoinAndSelect('class.teacher', 'teacher')
-      .where('schedule.id = :scheduleId', {scheduleId})
-      .select([
-        'schedule.id',
-        'schedule.class_id',
-        'schedule.start_time',
-        'schedule.end_time',
-        'schedule.subject',
-        'teacher.id',
-        'teacher.name',
-        'teacher.contact_number'
-      ])
-      .getOne();
-      if (!schedule) {
+  async findScheduleById(scheduleId: number): Promise<any> {
+    const schedule = await this.dailyScheduleRepository.query(
+      `
+        SELECT 
+          schedule.id as scheduleId,
+          schedule.class_id as classId,
+          schedule.start_time as startTime,
+          schedule.end_time as endTime,
+          subjects.id AS subjectId,
+          subjects.name AS subjectName,
+          teachers.id as teacherId,
+          teachers.name as teacherName,
+          teachers.contact_number as teacherContactNumber
+        FROM daily_schedules schedule
+        LEFT JOIN classes ON schedule.class_id = classes.id
+        LEFT JOIN subjects ON schedule.subject_id = subjects.id  
+        LEFT JOIN teachers ON classes.teacher_id = teachers.id
+        WHERE schedule.id = $1
+      `, 
+      [scheduleId]
+    );
+
+      if (!schedule || schedule.length === 0) {
         throw new NotFoundException('Schedule not found');
       }
-      return schedule;
+      const result = schedule[0];
+      const formattedResult = {
+        scheduleId: result.scheduleid,
+        classId: result.classid,
+        startTime: result.starttime,
+        endTime: result.endtime,
+        subjectId: result.subjectid,
+        subjectName: result.subjectname,
+        teacherId: result.teacherid,
+        teacherName: result.teachername,
+        teacherContactNumber: result.teachercontactnumber
+      };
+      return formattedResult;
   }
 
 

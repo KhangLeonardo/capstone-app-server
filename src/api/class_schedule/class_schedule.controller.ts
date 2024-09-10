@@ -3,7 +3,7 @@ import { ClassScheduleService } from './class_schedule.service';
 import { CreateClassScheduleDto } from './dto/create-class_schedule.dto';
 import { AuthGuard } from '@nestjs/passport';
 
-@Controller('schedule')
+@Controller('class-schedule')
 export class ClassScheduleController {
   constructor(private readonly classScheduleService: ClassScheduleService) {}
 
