@@ -232,17 +232,30 @@ export class PostService {
     const mappedPost = await this.mapPostWithImages(post);
 
     const comments =
-      post.comments?.map((comment) => ({
-        id: comment.id,
-        content: comment.content,
-        user_id: comment.user_id,
-        created_at: comment.created_at,
-        updated_at: comment.updated_at,
-      })) ?? [];
-
+      await this.commentRepository
+        .createQueryBuilder('comment')
+        .leftJoinAndSelect('comment.user', 'user')
+        .where('comment.post_id = :postId', {postId: id})
+        .select([
+          'comment.id',
+          'comment.content',
+          'comment.created_at',
+          'comment.updated_at',
+          'user.id',
+          'user.name'
+        ])
+        .getMany();
+    const formattedComments = comments.map(comment => ({
+      id: comment.id,
+      content: comment.content,
+      user_id: comment.user.id,
+      username: comment.user.name,
+      created_at: comment.created_at,
+      updated_at: comment.updated_at
+    }))
     const numComments = comments.length;
 
-    return { post: { ...mappedPost, numComments }, comments };
+    return { post: { ...mappedPost, numComments }, comments: formattedComments };
   }
 
   async toggleLike(
