@@ -41,7 +41,7 @@ export class EatingScheduleService {
   private reformatResult(rawResult: any[]): any[] {
     const scheduleMap = new Map();
     rawResult.forEach(row => {
-      const scheduleId = row.scheduleId;
+      const scheduleId = row.id;
       if (!scheduleMap.has(scheduleId)) {
         scheduleMap.set(scheduleId, {
           scheduleId: row.id,
@@ -52,8 +52,8 @@ export class EatingScheduleService {
           mediaUrls: [],
         })
       }
-      if (row.mediaUrl) {
-        scheduleId.map(scheduleId).mediaUrls.push(row.mediaUrl);
+      if (row.url) {
+        scheduleMap.get(scheduleId).mediaUrls.push(row.url);
       }
     });
     return Array.from(scheduleMap.values());
