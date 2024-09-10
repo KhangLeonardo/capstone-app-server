@@ -3,13 +3,25 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { EatingSchedule } from '../../common/entities/eating-schedule.entity';
 import { scheduled } from 'rxjs';
+import { Student } from 'src/common/entities/student.entity';
 
 @Injectable()
 export class EatingScheduleService {
   constructor(
     @InjectRepository(EatingSchedule)
     private eatingScheduleRepository: Repository<EatingSchedule>,
+    @InjectRepository(Student)
+    private studentRepository: Repository<Student>
   ) {}
+  
+  async findStudentByUser(userId: number): Promise<Student[]> {
+    return this.studentRepository
+      .createQueryBuilder('student')
+      .where('student.parent_id = :userId', { userId })
+      .select(['student.id', 'student.name'])
+      .getMany();
+  }
+
 
   async findByDateRange(
     studentId: number,

@@ -24,9 +24,8 @@ export class ClassScheduleController {
     @Body('endDate') endDate: string
   ) {
     const {id: userId} = request.user;
-    console.log('Parameters:', studentId, startDate, endDate);
 
-    return this.classScheduleService.findScheduleById(
+    return this.classScheduleService.findByDateRange(
       studentId,
       startDate,
       endDate

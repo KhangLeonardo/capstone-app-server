@@ -54,7 +54,7 @@ export class ClassScheduleService {
   //     .getMany();
   // }
 
-  async findScheduleById(
+  async findByDateRange(
 
     studentId: number,
     startDate: string,
@@ -84,7 +84,6 @@ export class ClassScheduleService {
       `, 
       [studentId,startDate, endDate]
     );
-    console.log(schedules);
       if (!schedules || schedules.length === 0) {
         throw new NotFoundException('Schedule not found');
       }
