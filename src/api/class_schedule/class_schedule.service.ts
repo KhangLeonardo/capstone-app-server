@@ -69,6 +69,7 @@ export class ClassScheduleService {
       schedule.end_time,
       subjects.id AS subject_id,
       subjects.name AS subject_name,
+      subjects.description AS subject_description,
       teachers.id as teacher_id,
       teachers.name as teacher_name,
       teachers.contact_number as contact_number
@@ -94,6 +95,7 @@ export class ClassScheduleService {
         endTime: result.end_time,
         subjectId: result.subject_id,
         subjectName: result.subject_name,
+        subjectDescription: result.subject_description,
         teacherId: result.teacher_id,
         teacherName: result.teacher_name,
         teacherContactNumber: result.contact_number
