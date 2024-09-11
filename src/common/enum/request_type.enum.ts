@@ -1,4 +1,4 @@
 export enum RequestType {
-    FamilyLeave = 'Family Leave',
-    HealthIssue = 'Health Issue'
+    FamilyLeave = 'absence',
+    HealthIssue = 'medical'
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards, Req, Body, Post } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards, Req, Body, Post } from '@nestjs/common';
 import { RequestService } from './request.service';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateRequestDto } from './dto/create-request.dto';
@@ -16,11 +16,11 @@ export class RequestController {
         return this.requestService.findAllRequests(parentId);
     }
 
-    @Post()
+    @Post(':studentId')
     @UseGuards(AuthGuard('jwt'))
-    async createRequest(@Req() request: any, @Body() createRequestDto: CreateRequestDto) {
+    async createRequest(@Req() request: any, @Body() createRequestDto: CreateRequestDto, @Param('studentId') studentId: number) {
         const user = request.user;
         const parentId = user.id;
-        return this.requestService.createRequest(parentId, createRequestDto);
+        return this.requestService.createRequest(parentId, studentId, createRequestDto);
     }
 }

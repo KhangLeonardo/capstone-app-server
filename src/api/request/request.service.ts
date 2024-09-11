@@ -1,11 +1,10 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository} from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { Request } from 'src/common/entities/request.entity';
 import { CreateRequestDto } from './dto/create-request.dto';
 import { ClassStudent } from 'src/common/entities/class-student.entity';
-import { RequestStatus } from 'src/common/enum/request_status.enum';
 
 
 @Injectable()
@@ -18,60 +17,60 @@ export class RequestService {
         private classStudentRepository: Repository<ClassStudent>
     ) {}
 
+    // Updated to return all requests for a parent’s children
     async findAllRequests(parentId: number): Promise<Request[]> {
         const sql = `
-          SELECT 
-            request.student_id,
-            request.class_id,
-            request.request_status,
-            request.request_type,
-            request.start_time,
-            request.end_time,
-            request.reason,
-            s."name" as student_name,
-            s.parent_id 
-          FROM 
-            request
-          INNER JOIN 
-            students s ON request.student_id = s.id 
-          INNER JOIN 
-            class_students cs ON s.id = cs.student_id
-          WHERE 
-            s.parent_id = $1
+            SELECT 
+                r.id,
+                r.student_id,
+                r.class_id,
+                r.status as request_status,
+                r.request_type,
+                r.start_time,
+                r.end_time,
+                r.reason,
+                s.name as student_name,
+                s.parent_id 
+            FROM 
+                requests r
+            INNER JOIN 
+                students s ON r.student_id = s.id
+            INNER JOIN 
+                class_students cs ON s.id = cs.student_id
+            WHERE 
+                s.parent_id = $1
         `;
         const results = await this.requestRepository.query(sql, [parentId]);
+
+        // Handle empty results scenario if needed
+        if (results.length === 0) {
+            throw new NotFoundException(`No requests found for parent with ID ${parentId}`);
+        }
+
         return results;
-      }
+    }
     
-    async createRequest(parentId: number, createRequestDto: CreateRequestDto): Promise<Request> {
+    async createRequest(parentId: number, studentId: number, createRequestDto: CreateRequestDto): Promise<Request> {
+        // Validate if the student belongs to the parent
         const classStudent = await this.classStudentRepository
             .createQueryBuilder('cs')
             .innerJoinAndSelect('cs.student', 'student')
-            .where('student.parent_id = :parent_id', { parent_id: parentId })
+            .innerJoinAndSelect('cs.class', 'class')
+            .where('student.parent_id = :parentId', { parentId })
+            .andWhere('student.id = :studentId', { studentId })
             .getOne();
 
+        // If no result, student either doesn't exist or is not the parent's child
         if (!classStudent) {
-            throw new NotFoundException('Student not found');
+            throw new NotFoundException('Student not found or does not belong to the parent');
         }
 
-        const existingRequest = await this.requestRepository.findOne({
-            where: {
-                student_id: classStudent.student.id,
-                class_id: classStudent.class.id,
-                start_time: createRequestDto.start_time,
-                end_time: createRequestDto.end_time,
-            },
-        });
-
-        if (existingRequest) {
-            throw new ConflictException('Request already exists for this period.');
-        }
-
+        // Create and save the request, linking it to the student and the class
         const request = this.requestRepository.create({
             ...createRequestDto,
             student_id: classStudent.student.id,
             class_id: classStudent.class.id,
-            status: RequestStatus.pending,
+            status: "pending",  // Assuming 'pending' is the default status for new requests
         });
 
         await this.requestRepository.save(request);
