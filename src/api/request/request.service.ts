@@ -20,7 +20,7 @@ export class RequestService {
     // Updated to return all requests for a parent’s children
     async findAllRequests(parentId: number): Promise<Request[]> {
         const sql = `
-            SELECT 
+            SELECT DISTINCT
                 r.id,
                 r.student_id,
                 r.class_id,
@@ -30,7 +30,7 @@ export class RequestService {
                 r.end_time,
                 r.reason,
                 s.name as student_name,
-                s.parent_id 
+                s.parent_id
             FROM 
                 requests r
             INNER JOIN 
@@ -41,6 +41,7 @@ export class RequestService {
                 s.parent_id = $1
         `;
         const results = await this.requestRepository.query(sql, [parentId]);
+        console.log(results)
 
         // Handle empty results scenario if needed
         if (results.length === 0) {
